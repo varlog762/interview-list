@@ -1,7 +1,7 @@
 {
   "name": "interview-list",
   "version": "0.0.1",
-  "description": "Intervirew list",
+  "description": "Interview list",
   "productName": "Interview list",
   "author": "Gregory Pereverzev <boot762@gmail.com>",
   "private": true,
