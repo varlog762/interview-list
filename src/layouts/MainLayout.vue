@@ -13,22 +13,35 @@
         </q-tabs>
         <q-space />
         <q-btn flat round dense icon="whatshot" />
-      </q-toolbar> </q-header
-  ></q-layout>
+      </q-toolbar>
+    </q-header>
+    <q-page-container>
+      <router-view />
+    </q-page-container>
+  </q-layout>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 
 defineOptions({
   name: 'MainLayout',
 });
 
+const router = useRouter();
+const route = useRoute();
+
 const menuItems = [
-  { label: 'Add', icon: 'add', name: 'add' },
+  { label: 'Add', icon: 'add', name: '' },
   { label: 'Interviews', icon: 'list', name: 'interviews' },
   { label: 'Statistics', icon: 'bar_chart', name: 'statistics' },
 ];
 
-const tab = ref('add');
+const tab = ref(route.path.slice(1));
+
+watch(tab, newValue => {
+  router.push(`/${newValue}`);
+});
 </script>
+<style scoped></style>
