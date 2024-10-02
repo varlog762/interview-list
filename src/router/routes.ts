@@ -1,10 +1,12 @@
 import { RouteRecordRaw } from 'vue-router';
 import MainLayout from 'layouts/MainLayout.vue';
+import AuthLayout from 'layouts/AuthLayout.vue';
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: MainLayout,
+    meta: { requiresAuth: true },
     children: [
       {
         path: '',
@@ -20,6 +22,23 @@ const routes: RouteRecordRaw[] = [
         path: 'statistics',
         name: 'statistics',
         component: () => import('pages/StatisticsPage.vue'),
+      },
+    ],
+  },
+  {
+    path: '/auth',
+    redirect: '/auth/login',
+    component: AuthLayout,
+    children: [
+      {
+        path: 'login',
+        name: 'login',
+        component: () => import('pages/LoginPage.vue'),
+      },
+      {
+        path: 'register',
+        name: 'register',
+        component: () => import('pages/RegisterPage.vue'),
       },
     ],
   },
