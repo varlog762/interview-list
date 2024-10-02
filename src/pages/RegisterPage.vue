@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 
 import { validateEmailInput, validatePasswordInput } from 'src/utils';
 import { authErrors } from 'src/enums';
@@ -18,13 +18,28 @@ const validatePasswordConfirmation = (): string | true => {
   return true;
 };
 
-const onSubmit = () => {};
+const validateForm = () => {
+  const isEmailValid = validateEmailInput(email.value) === true;
+  const isPasswordValid = validatePasswordInput(password.value) === true;
+  const isPasswordConfirmationValid = validatePasswordConfirmation() === true;
+  isFormValid.value =
+    isEmailValid && isPasswordValid && isPasswordConfirmationValid;
+};
+
+watch([email, password, confirmPassword], validateForm);
+
+const onSubmit = () => {
+  console.log({
+    email: email.value,
+    password: password.value,
+  });
+};
 </script>
 
 <template>
   <div class="form-wrapper">
     <div class="q-pa-md" style="max-width: 500px">
-      <h2 class="title-md">Sign un</h2>
+      <h2 class="title-md">Sign up</h2>
       <router-link to="/auth/login" class="auth-link"
         >Have an account?</router-link
       >
@@ -47,7 +62,7 @@ const onSubmit = () => {};
         <q-input
           filled
           type="password"
-          v-model="password"
+          v-model="confirmPassword"
           label="Confirm password"
           :rules="[validatePasswordConfirmation]" />
         <div>

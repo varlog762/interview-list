@@ -8,7 +8,7 @@
           <q-avatar rounded>
             <img src="/src/assets/images/logo.png" />
           </q-avatar>
-          Interview list
+          INTERVIEW LIST
         </q-toolbar-title>
       </q-toolbar>
     </q-header>

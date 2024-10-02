@@ -3,12 +3,12 @@ import { computed, ref, watch } from 'vue';
 
 import { validateEmailInput, validatePasswordInput } from 'src/utils';
 
-const email = ref('');
-const password = ref('');
-const isFormValid = ref(false);
-const isSubmitButtonDisabled = computed(() => !isFormValid.value);
+const email = ref<string>('');
+const password = ref<string>('');
+const isFormValid = ref<boolean>(false);
+const isSubmitButtonDisabled = computed<boolean>(() => !isFormValid.value);
 
-const validateForm = () => {
+const validateForm = (): void => {
   const isEmailValid = validateEmailInput(email.value) === true;
   const isPasswordValid = validatePasswordInput(password.value) === true;
   isFormValid.value = isEmailValid && isPasswordValid;
@@ -44,7 +44,7 @@ const onSubmit = () => {
           :rules="[validatePasswordInput]" />
         <div>
           <q-btn
-            label="Submit"
+            label="sign in"
             type="submit"
             color="primary"
             :disable="isSubmitButtonDisabled" />

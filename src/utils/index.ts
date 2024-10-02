@@ -6,16 +6,20 @@ export const validateEmailInput = (email: string): string | boolean => {
   return emailRegex.test(email) || authErrors.INVALID_EMAIL;
 };
 
-export const validatePasswordInput = (value: string): string | boolean => {
+export const validatePasswordInput = (password: string): string | boolean => {
   const minLength = 8;
-  const hasUppercaseLetter = /[A-Z]/.test(value);
-  const hasLowercaseLetter = /[a-z]/.test(value);
-  const hasNumber = /[0-9]/.test(value);
+  const hasUppercaseLetter = /[A-Z]/.test(password);
+  const hasLowercaseLetter = /[a-z]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
   const hasSpecialCharacter = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(
-    value
+    password
   );
 
-  if (value.length < minLength) {
+  if (!password) {
+    return authErrors.ENTER_PASSWORD;
+  }
+
+  if (password.length < minLength) {
     return authErrors.INVALID_PASSWORD_MIN_LENGTH;
   }
   if (!hasUppercaseLetter) {
