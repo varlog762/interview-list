@@ -4,6 +4,8 @@ import {
   createRouter,
   createWebHashHistory,
   createWebHistory,
+  NavigationGuardNext,
+  RouteLocationNormalized,
 } from 'vue-router';
 
 import routes from './routes';
@@ -35,17 +37,23 @@ export default route(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE),
   });
 
-  Router.beforeEach((to, from, next) => {
-    const userStore = useUserStore();
+  Router.beforeEach(
+    (
+      to: RouteLocationNormalized,
+      from: RouteLocationNormalized,
+      next: NavigationGuardNext
+    ) => {
+      const userStore = useUserStore();
 
-    if (to.meta.requiresAuth && !userStore.isLoggedIn) {
-      next({ path: '/auth' });
-    } else if (userStore.isLoggedIn && to.path.startsWith('/auth')) {
-      next({ path: '/' });
-    } else {
-      next();
+      if (to.meta.requiresAuth && !userStore.isLoggedIn) {
+        next({ path: '/auth' });
+      } else if (userStore.isLoggedIn && to.path.startsWith('/auth')) {
+        next({ path: '/' });
+      } else {
+        next();
+      }
     }
-  });
+  );
 
   return Router;
 });
