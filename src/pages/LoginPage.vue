@@ -1,17 +1,23 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
-import { validateEmailInput } from 'src/utils';
+import { validateEmailInput, validatePasswordInput } from 'src/utils';
 
 const email = ref('');
 const password = ref('');
+const isFormValid = ref(false);
+const isSubmitButtonDisabled = computed(() => !isFormValid.value);
 
+const validateForm = () => {
+  const isEmailValid = validateEmailInput(email.value) === true;
+  const isPasswordValid = validatePasswordInput(password.value) === true;
+  isFormValid.value = isEmailValid && isPasswordValid;
+};
+
+watch([email, password], validateForm);
 const onSubmit = () => {
   console.log('submit');
 };
-
-const validatePasswordInput = (val: string): string | boolean =>
-  (val && val.length > 0) || 'Please type a password';
 </script>
 
 <template>
@@ -23,7 +29,6 @@ const validatePasswordInput = (val: string): string | boolean =>
           type="email"
           v-model="email"
           label="Email"
-          hint="Enter your email"
           lazy-rules
           :rules="[validateEmailInput]" />
 
@@ -31,14 +36,14 @@ const validatePasswordInput = (val: string): string | boolean =>
           filled
           type="password"
           v-model="password"
-          label=""
-          lazy-rules
-          :rules="[
-            val => (val !== null && val !== '') || 'Please type your password',
-            val => (val > 0 && val < 100) || 'Please type a password',
-          ]" />
+          label="Password"
+          :rules="[validatePasswordInput]" />
         <div>
-          <q-btn label="Submit" type="submit" color="primary" />
+          <q-btn
+            label="Submit"
+            type="submit"
+            color="primary"
+            :disable="isSubmitButtonDisabled" />
         </div>
       </q-form>
     </div>
