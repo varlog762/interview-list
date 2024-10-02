@@ -1,7 +1,9 @@
+import { authErrors } from 'src/enums';
+
 export const validateEmailInput = (email: string): string | boolean => {
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
-  return emailRegex.test(email) || 'Please enter a valid email address';
+  return emailRegex.test(email) || authErrors.INVALID_EMAIL;
 };
 
 export const validatePasswordInput = (value: string): string | boolean => {
@@ -14,19 +16,19 @@ export const validatePasswordInput = (value: string): string | boolean => {
   );
 
   if (value.length < minLength) {
-    return `Password must be at least ${minLength} characters long`;
+    return authErrors.INVALID_PASSWORD_MIN_LENGTH;
   }
   if (!hasUppercaseLetter) {
-    return 'Password must contain at least one uppercase letter';
+    return authErrors.INVALID_PASSWORD_UPPERCASE;
   }
   if (!hasLowercaseLetter) {
-    return 'Password must contain at least one lowercase letter';
+    return authErrors.INVALID_PASSWORD_LOWERCASE;
   }
   if (!hasNumber) {
-    return 'Password must contain at least one number';
+    return authErrors.INVALID_PASSWORD_NUMBER;
   }
   if (!hasSpecialCharacter) {
-    return 'Password must contain at least one special character';
+    return authErrors.INVALID_PASSWORD_SPECIAL;
   }
 
   return true;

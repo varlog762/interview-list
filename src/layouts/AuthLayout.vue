@@ -3,11 +3,11 @@
 <template>
   <q-layout view="hHh lpR fFf">
     <q-header elevated class="bg-primary text-white">
-      <q-toolbar>
-        <q-toolbar-title>
-          <!-- <q-avatar>
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
-          </q-avatar> -->
+      <q-toolbar class="q-pa-md">
+        <q-toolbar-title class="text-weight-bold">
+          <q-avatar rounded>
+            <img src="/src/assets/images/logo.png" />
+          </q-avatar>
           Interview list
         </q-toolbar-title>
       </q-toolbar>

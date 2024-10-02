@@ -1,1 +1,24 @@
+a {
+  text-decoration: none;
+  color: $light;
+}
 
+.title-md {
+  margin: 0px;
+  font-weight: normal;
+  font-size: 32px;
+  text-align: center;
+  color: $dark;
+}
+
+.auth-link {
+  display: block;
+  margin-bottom: 20px;
+  text-align: center;
+  color: $primary;
+  border: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
