@@ -3,12 +3,14 @@ import { ref, computed, watch } from 'vue';
 
 import { validateEmailInput, validatePasswordInput } from 'src/utils';
 import { authErrors } from 'src/enums';
+import useQuasarNotify from 'src/composables/useQuasarNotify';
 
 const email = ref<string>('');
 const password = ref<string>('');
 const confirmPassword = ref<string>('');
 const isFormValid = ref<boolean>(false);
 const isSubmitButtonDisabled = computed<boolean>(() => !isFormValid.value);
+const showToast = useQuasarNotify();
 
 const validatePasswordConfirmation = (): string | true => {
   if (password.value !== confirmPassword.value) {
@@ -29,10 +31,7 @@ const validateForm = () => {
 watch([email, password, confirmPassword], validateForm);
 
 const onSubmit = () => {
-  console.log({
-    email: email.value,
-    password: password.value,
-  });
+  showToast('positive', 'Registering user...');
 };
 </script>
 
