@@ -3,9 +3,10 @@ import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import { FirebaseError } from 'firebase/app';
 
-import { signUpWithEmailAndPassword } from 'src/services/firebase';
+import { firebaseSignUp } from 'src/services/firebase';
 import { getErrorMessage } from 'src/utils';
 import { AuthInputInterface } from 'src/models/auth-input.interface';
+import { AuthErrors } from 'src/enums';
 
 export const useUserStore = defineStore('user', () => {
   // TODO: set default userId value to null
@@ -21,14 +22,18 @@ export const useUserStore = defineStore('user', () => {
     try {
       isLoading.value = true;
       errorMessage.value = null;
-      const userCredential = await signUpWithEmailAndPassword(email, password);
+      const userCredential = await firebaseSignUp(email, password);
       isLoading.value = false;
       return true;
     } catch (error) {
       isLoading.value = false;
+
       if (error instanceof FirebaseError) {
         errorMessage.value = getErrorMessage(error.code);
+        return false;
       }
+
+      errorMessage.value = AuthErrors.UNKNOWN_ERROR;
       return false;
     }
   };
