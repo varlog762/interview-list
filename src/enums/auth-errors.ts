@@ -1,4 +1,4 @@
-export enum authErrors {
+export enum AuthErrors {
   INVALID_EMAIL = 'The email address is invalid',
   EMAIL_ALREADY_IN_USE = 'This email is already in use',
   ENTER_PASSWORD = 'Please enter a password',

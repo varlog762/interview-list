@@ -5,6 +5,7 @@ import { FirebaseError } from 'firebase/app';
 
 import { signUpWithEmailAndPassword } from 'src/services/firebase';
 import { getErrorMessage } from 'src/utils';
+import { AuthInputInterface } from 'src/models/auth-input.interface';
 
 export const useUserStore = defineStore('user', () => {
   // TODO: set default userId value to null
@@ -16,10 +17,7 @@ export const useUserStore = defineStore('user', () => {
   const signUp = async ({
     email,
     password,
-  }: {
-    email: string;
-    password: string;
-  }): Promise<boolean> => {
+  }: AuthInputInterface): Promise<boolean> => {
     try {
       isLoading.value = true;
       errorMessage.value = null;
@@ -34,7 +32,6 @@ export const useUserStore = defineStore('user', () => {
       return false;
     }
   };
-
   return {
     userId,
     isLoading,

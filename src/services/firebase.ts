@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { initializeApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signOut,
+} from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -13,11 +17,11 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth();
 
 export const signUpWithEmailAndPassword = async (
   email: string,
   password: string
-) => {
-  const auth = getAuth();
-  return await createUserWithEmailAndPassword(auth, email, password);
-};
+) => await createUserWithEmailAndPassword(auth, email, password);
+
+export const signOutUser = async () => await signOut(auth);
