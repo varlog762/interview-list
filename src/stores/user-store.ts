@@ -4,6 +4,7 @@ import { defineStore } from 'pinia';
 import { FirebaseError } from 'firebase/app';
 
 import { signUpWithEmailAndPassword } from 'src/services/firebase';
+import { getErrorMessage } from 'src/utils';
 
 export const useUserStore = defineStore('user', () => {
   // TODO: set default userId value to null
@@ -28,7 +29,7 @@ export const useUserStore = defineStore('user', () => {
     } catch (error) {
       isLoading.value = false;
       if (error instanceof FirebaseError) {
-        errorMessage.value = error.code;
+        errorMessage.value = getErrorMessage(error.code);
       }
       return false;
     }

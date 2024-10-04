@@ -38,9 +38,12 @@ const onSubmit = async () => {
     password: password.value,
   });
 
-  isRegistrationSuccess
-    ? showToast('positive', 'Registering user success!')
-    : showToast('negative', 'Registering user failure!');
+  if (!isRegistrationSuccess) {
+    showToast('negative', userStore.errorMessage as string);
+    return;
+  }
+
+  showToast('positive', 'Registering user success!');
 };
 </script>
 

@@ -1,4 +1,5 @@
 import { authErrors } from 'src/enums';
+import { firebaseErrorMessages } from 'src/constants';
 
 export const validateEmailInput = (email: string): string | boolean => {
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -36,4 +37,8 @@ export const validatePasswordInput = (password: string): string | boolean => {
   }
 
   return true;
+};
+
+export const getErrorMessage = (errorCode: string): string => {
+  return firebaseErrorMessages[errorCode] ?? authErrors.UNKNOWN_ERROR;
 };

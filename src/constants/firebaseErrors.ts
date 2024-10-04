@@ -1,8 +1,10 @@
+import { authErrors } from 'src/enums';
+
 export const firebaseErrorMessages: Record<string, string> = {
-  'auth/email-already-in-use': 'This email is already in use.',
-  'auth/invalid-email': 'The email address is invalid.',
-  'auth/weak-password': 'The password is too weak.',
-  'auth/user-disabled': 'This user account has been disabled.',
-  'auth/user-not-found': 'No user found with this email.',
-  'auth/wrong-password': 'Incorrect password.',
+  'auth/email-already-in-use': authErrors.EMAIL_ALREADY_IN_USE,
+  'auth/invalid-email': authErrors.INVALID_EMAIL,
+  'auth/weak-password': authErrors.PASSWORD_TOO_WEAK,
+  'auth/user-disabled': authErrors.ACCOUNT_DISABLED,
+  'auth/user-not-found': authErrors.USER_NOT_FOUND,
+  'auth/wrong-password': authErrors.INCORRECT_PASSWORD,
 };
