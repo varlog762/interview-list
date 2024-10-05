@@ -2,7 +2,9 @@
 import { computed, ref, watch } from 'vue';
 
 import { validateEmailInput, validatePasswordInput } from 'src/utils';
+import { useUserStore } from 'src/stores/user-store';
 
+const userStore = useUserStore();
 const email = ref<string>('');
 const password = ref<string>('');
 const isFormValid = ref<boolean>(false);
@@ -15,8 +17,13 @@ const validateForm = (): void => {
 };
 
 watch([email, password], validateForm);
-const onSubmit = () => {
-  console.log('submit');
+const onSubmit = async () => {
+  const authInput = {
+    email: email.value,
+    password: password.value,
+  };
+
+  userStore.signIn(authInput);
 };
 </script>
 
@@ -47,7 +54,8 @@ const onSubmit = () => {
             label="sign in"
             type="submit"
             color="primary"
-            :disable="isSubmitButtonDisabled" />
+            :disable="isSubmitButtonDisabled"
+            :loading="userStore.isLoading" />
         </div>
       </q-form>
     </div>

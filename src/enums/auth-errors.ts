@@ -8,9 +8,8 @@ export enum AuthErrors {
   INVALID_PASSWORD_NUMBER = 'Password must contain at least one number',
   INVALID_PASSWORD_SPECIAL = 'Password must contain at least one special character',
   PASSWORD_TOO_WEAK = 'The password is too weak',
-  INCORRECT_PASSWORD = 'Incorrect password',
   PASSWORDS_DONT_MATCH = 'Passwords do not match',
+  INVALID_CREDENTIALS = 'Invalid email or password',
   ACCOUNT_DISABLED = 'This user account has been disabled',
-  USER_NOT_FOUND = 'No user found with this email',
   UNKNOWN_ERROR = 'An unknown error occurred',
 }

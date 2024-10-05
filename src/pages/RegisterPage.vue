@@ -4,7 +4,6 @@ import { ref, computed, watch } from 'vue';
 import { validateEmailInput, validatePasswordInput } from 'src/utils';
 import { AuthErrors } from 'src/enums';
 import { useUserStore } from 'src/stores/user-store';
-import useQuasarNotify from 'src/composables/useQuasarNotify';
 
 const userStore = useUserStore();
 const email = ref<string>('');
@@ -12,7 +11,6 @@ const password = ref<string>('');
 const confirmPassword = ref<string>('');
 const isFormValid = ref<boolean>(false);
 const isSubmitButtonDisabled = computed<boolean>(() => !isFormValid.value);
-const showToast = useQuasarNotify();
 
 const validatePasswordConfirmation = (): string | true => {
   if (password.value !== confirmPassword.value) {
@@ -32,20 +30,13 @@ const validateForm = () => {
 
 watch([email, password, confirmPassword], validateForm);
 
-const onSubmit = async () => {
+const onSubmit = () => {
   const authInput = {
     email: email.value,
     password: password.value,
   };
 
-  const isRegistrationSuccess = await userStore.signUp(authInput);
-
-  if (!isRegistrationSuccess) {
-    showToast('negative', userStore.errorMessage as string);
-    return;
-  }
-
-  showToast('positive', 'Registering user success!');
+  userStore.signUp(authInput);
 };
 </script>
 

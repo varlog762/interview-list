@@ -5,6 +5,5 @@ export const firebaseErrorMessages: Record<string, string> = {
   'auth/invalid-email': AuthErrors.INVALID_EMAIL,
   'auth/weak-password': AuthErrors.PASSWORD_TOO_WEAK,
   'auth/user-disabled': AuthErrors.ACCOUNT_DISABLED,
-  'auth/user-not-found': AuthErrors.USER_NOT_FOUND,
-  'auth/wrong-password': AuthErrors.INCORRECT_PASSWORD,
+  'auth/invalid-credential': AuthErrors.INVALID_CREDENTIALS,
 };

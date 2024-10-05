@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import { FirebaseError } from 'firebase/app';
+import { UserCredential } from 'firebase/auth';
 
 import {
   firebaseSignUp,
@@ -11,65 +12,54 @@ import {
 import { getErrorMessage } from 'src/utils';
 import { AuthInputInterface } from 'src/models/auth-input.interface';
 import { AuthErrors } from 'src/enums';
+import { AuthMessages } from 'src/enums';
+import useQuasarNotify from 'src/composables/useQuasarNotify';
+import { ToastTypes } from 'src/enums';
 
 export const useUserStore = defineStore('user', () => {
+  const showToast = useQuasarNotify();
   // TODO: set default userId value to null
   const userId = ref<string | null>(null);
   const isLoading = ref<boolean>(false);
-  const errorMessage = ref<string | null>(null);
   const isLoggedIn = computed<boolean>(() => !!userId.value);
 
-  // TODO: refactor signUp & signIn
-  const signUp = async ({
-    email,
-    password,
-  }: AuthInputInterface): Promise<boolean> => {
-    try {
-      isLoading.value = true;
-      errorMessage.value = null;
-      const userCredential = await firebaseSignUp(email, password);
-      isLoading.value = false;
-      return true;
-    } catch (error) {
-      isLoading.value = false;
-
-      if (error instanceof FirebaseError) {
-        errorMessage.value = getErrorMessage(error.code);
-        return false;
-      }
-
-      errorMessage.value = AuthErrors.UNKNOWN_ERROR;
-      return false;
-    }
+  const signUp = (authInput: AuthInputInterface): void => {
+    handlePostData(authInput, AuthMessages.SIGN_UP_SUCCESS, firebaseSignUp);
   };
 
-  const signIn = async ({
-    email,
-    password,
-  }: AuthInputInterface): Promise<boolean> => {
+  const signIn = (authInput: AuthInputInterface): void => {
+    handlePostData(authInput, AuthMessages.SIGN_IN_SUCCESS, firebaseSignIn);
+  };
+
+  const handlePostData = async (
+    authInput: AuthInputInterface,
+    positiveMessage: string,
+    cb: (email: string, password: string) => Promise<UserCredential>
+  ) => {
+    const { email, password } = authInput;
     try {
       isLoading.value = true;
-      errorMessage.value = null;
-      const userCredential = await firebaseSignIn(email, password);
+      const userCredential = await cb(email, password);
+      console.dir(userCredential);
+      showToast(ToastTypes.POSITIVE, positiveMessage);
       isLoading.value = false;
-      return true;
     } catch (error) {
       isLoading.value = false;
 
       if (error instanceof FirebaseError) {
-        errorMessage.value = getErrorMessage(error.code);
-        return false;
+        const errorMessage = getErrorMessage(error.code);
+        showToast(ToastTypes.NEGATIVE, errorMessage);
+        return;
       }
 
-      errorMessage.value = AuthErrors.UNKNOWN_ERROR;
-      return false;
+      showToast(ToastTypes.NEGATIVE, AuthErrors.UNKNOWN_ERROR);
     }
   };
   return {
     userId,
     isLoading,
-    errorMessage,
     isLoggedIn,
     signUp,
+    signIn,
   };
 });
