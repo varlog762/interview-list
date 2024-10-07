@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import { defineStore } from 'pinia';
 import { FirebaseError } from 'firebase/app';
 import { UserCredential } from 'firebase/auth';
+
+import { RouteNames } from 'src/enums';
 
 import {
   firebaseSignUp,
@@ -17,6 +20,7 @@ import useQuasarNotify from 'src/composables/useQuasarNotify';
 import { ToastTypes } from 'src/enums';
 
 export const useUserStore = defineStore('user', () => {
+  const router = useRouter();
   const showToast = useQuasarNotify();
   // TODO: set default userId value to null
   const userId = ref<string | null>(null);
@@ -41,8 +45,8 @@ export const useUserStore = defineStore('user', () => {
       isLoading.value = true;
       const userCredential = await cb(email, password);
       console.dir(userCredential);
-      showToast(ToastTypes.POSITIVE, positiveMessage);
       isLoading.value = false;
+      router.push({ name: RouteNames.ROOT });
     } catch (error) {
       isLoading.value = false;
 

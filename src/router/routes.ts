@@ -1,43 +1,46 @@
 import { RouteRecordRaw } from 'vue-router';
+import { RoutePaths, RouteNames } from 'src/enums';
 import MainLayout from 'layouts/MainLayout.vue';
 import AuthLayout from 'layouts/AuthLayout.vue';
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/',
+    path: RoutePaths.ROOT,
+    name: RouteNames.ROOT,
     component: MainLayout,
     meta: { requiresAuth: true },
     children: [
       {
-        path: '',
-        name: 'add',
+        path: RoutePaths.ADD,
+        name: RouteNames.ADD,
         component: () => import('pages/IndexPage.vue'),
       },
       {
-        path: 'interviews',
-        name: 'interviews',
+        path: RoutePaths.INTERVIEWS,
+        name: RouteNames.INTERVIEWS,
         component: () => import('pages/InterviewsPage.vue'),
       },
       {
-        path: 'statistics',
-        name: 'statistics',
+        path: RoutePaths.STATISTICS,
+        name: RouteNames.STATISTICS,
         component: () => import('pages/StatisticsPage.vue'),
       },
     ],
   },
   {
-    path: '/auth',
-    redirect: '/auth/login',
+    path: RoutePaths.AUTH,
+    name: RouteNames.AUTH,
+    redirect: `${RoutePaths.AUTH}/${RoutePaths.LOGIN}`,
     component: AuthLayout,
     children: [
       {
-        path: 'login',
-        name: 'login',
+        path: RoutePaths.LOGIN,
+        name: RouteNames.LOGIN,
         component: () => import('pages/LoginPage.vue'),
       },
       {
-        path: 'register',
-        name: 'register',
+        path: RoutePaths.REGISTER,
+        name: RouteNames.REGISTER,
         component: () => import('pages/RegisterPage.vue'),
       },
     ],
@@ -46,7 +49,8 @@ const routes: RouteRecordRaw[] = [
   // Always leave this as last one,
   // but you can also remove it
   {
-    path: '/:catchAll(.*)*',
+    path: RoutePaths.NOT_FOUND,
+    name: RouteNames.NOT_FOUND,
     component: () => import('pages/ErrorNotFound.vue'),
   },
 ];
