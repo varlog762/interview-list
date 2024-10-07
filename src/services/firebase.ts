@@ -5,6 +5,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  UserCredential,
 } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -18,12 +19,24 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth();
 
-export const firebaseSignUp = async (email: string, password: string) =>
-  await createUserWithEmailAndPassword(auth, email, password);
+export const firebaseSignUp = (
+  email: string,
+  password: string
+): Promise<UserCredential> => {
+  const auth = getAuth();
+  return createUserWithEmailAndPassword(auth, email, password);
+};
 
-export const firebaseSignIn = async (email: string, password: string) =>
-  await signInWithEmailAndPassword(auth, email, password);
+export const firebaseSignIn = (
+  email: string,
+  password: string
+): Promise<UserCredential> => {
+  const auth = getAuth();
+  return signInWithEmailAndPassword(auth, email, password);
+};
 
-export const firebaseSignOut = async () => await signOut(auth);
+export const firebaseSignOut = () => {
+  const auth = getAuth();
+  signOut(getAuth());
+};

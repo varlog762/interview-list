@@ -3,7 +3,7 @@ export enum RoutePaths {
   ADD = '',
   INTERVIEWS = 'interviews',
   STATISTICS = 'statistics',
-  AUTH = 'auth',
+  AUTH = '/auth',
   LOGIN = 'login',
   REGISTER = 'register',
   NOT_FOUND = '/:catchAll(.*)*',

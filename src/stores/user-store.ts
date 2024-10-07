@@ -28,36 +28,38 @@ export const useUserStore = defineStore('user', () => {
   const isLoggedIn = computed<boolean>(() => !!userId.value);
 
   const signUp = (authInput: AuthInputInterface): void => {
-    handlePostData(authInput, AuthMessages.SIGN_UP_SUCCESS, firebaseSignUp);
+    handleAuth(authInput, firebaseSignUp);
   };
 
   const signIn = (authInput: AuthInputInterface): void => {
-    handlePostData(authInput, AuthMessages.SIGN_IN_SUCCESS, firebaseSignIn);
+    handleAuth(authInput, firebaseSignIn);
   };
 
-  const handlePostData = async (
+  const handleAuth = async (
     authInput: AuthInputInterface,
-    positiveMessage: string,
-    cb: (email: string, password: string) => Promise<UserCredential>
-  ) => {
-    const { email, password } = authInput;
+    authCallback: (email: string, password: string) => Promise<UserCredential>
+  ): Promise<void> => {
+    isLoading.value = true;
+
     try {
-      isLoading.value = true;
-      const userCredential = await cb(email, password);
-      console.dir(userCredential);
-      isLoading.value = false;
+      const { email, password } = authInput;
+      await authCallback(email, password);
       router.push({ name: RouteNames.ROOT });
     } catch (error) {
+      catchError(error as Error);
+    } finally {
       isLoading.value = false;
-
-      if (error instanceof FirebaseError) {
-        const errorMessage = getErrorMessage(error.code);
-        showToast(ToastTypes.NEGATIVE, errorMessage);
-        return;
-      }
-
-      showToast(ToastTypes.NEGATIVE, AuthErrors.UNKNOWN_ERROR);
     }
+  };
+
+  const catchError = (error: Error): void => {
+    if (error instanceof FirebaseError) {
+      const errorMessage = getErrorMessage(error.code);
+      showToast(ToastTypes.NEGATIVE, errorMessage);
+      return;
+    }
+
+    showToast(ToastTypes.NEGATIVE, AuthErrors.UNKNOWN_ERROR);
   };
   return {
     userId,
