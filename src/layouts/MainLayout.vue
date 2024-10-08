@@ -31,6 +31,7 @@ import { ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 
 import { useUserStore } from 'stores/user-store';
+import { RouteNames } from 'src/enums';
 
 defineOptions({
   name: 'MainLayout',
@@ -49,17 +50,24 @@ const menuItems: MenuItemInterface[] = [
 
 const tab = ref(route.path.slice(1));
 
-watch(tab, newValue => {
-  router.push(`/${newValue}`);
+watch(tab, newRoute => {
+  router.push(`/${newRoute}`);
 });
-watch(route, () => {
-  tab.value = route.path.slice(1);
-});
-watch(userStore, () => {
-  if (!userStore.userId) {
-    router.push('/auth');
+/**
+ * Correctly change tab value on route changed manually
+ */
+watch(
+  () => route.path,
+  () => (tab.value = route.path.slice(1))
+);
+watch(
+  () => userStore.userId,
+  newUserId => {
+    if (!newUserId) {
+      router.push({ name: RouteNames.AUTH });
+    }
   }
-});
+);
 </script>
 <style scoped>
 .btn-logout {

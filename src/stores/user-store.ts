@@ -15,15 +15,14 @@ import {
 import { getErrorMessage } from 'src/utils';
 import { AuthInputInterface } from 'src/models/auth-input.interface';
 import { AuthErrors } from 'src/enums';
-import { AuthMessages } from 'src/enums';
 import useQuasarNotify from 'src/composables/useQuasarNotify';
 import { ToastTypes } from 'src/enums';
 
 export const useUserStore = defineStore('user', () => {
   const router = useRouter();
   const showToast = useQuasarNotify();
-  // TODO: set default userId value to null
-  const userId = ref<string | null>(null);
+
+  const userId = ref<string | null>('null');
   const isLoading = ref<boolean>(false);
   const isLoggedIn = computed<boolean>(() => !!userId.value);
 
