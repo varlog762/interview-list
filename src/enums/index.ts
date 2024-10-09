@@ -1,4 +1,4 @@
-export * from './auth-errors';
+export * from './error-messages';
 export * from './toast-types';
 export * from './route-paths';
 export * from './route-names';

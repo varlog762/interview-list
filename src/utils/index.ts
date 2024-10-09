@@ -1,10 +1,12 @@
-import { AuthErrors } from 'src/enums';
+import { FirebaseError } from 'firebase/app';
+
+import { ErrorMessages } from 'src/enums';
 import { firebaseErrorMessages } from 'src/constants';
 
 export const validateEmailInput = (email: string): string | boolean => {
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
-  return emailRegex.test(email) || AuthErrors.INVALID_EMAIL;
+  return emailRegex.test(email) || ErrorMessages.INVALID_EMAIL;
 };
 
 export const validatePasswordInput = (password: string): string | boolean => {
@@ -17,28 +19,32 @@ export const validatePasswordInput = (password: string): string | boolean => {
   );
 
   if (!password) {
-    return AuthErrors.ENTER_PASSWORD;
+    return ErrorMessages.ENTER_PASSWORD;
   }
 
   if (password.length < minLength) {
-    return AuthErrors.INVALID_PASSWORD_MIN_LENGTH;
+    return ErrorMessages.INVALID_PASSWORD_MIN_LENGTH;
   }
   if (!hasUppercaseLetter) {
-    return AuthErrors.INVALID_PASSWORD_UPPERCASE;
+    return ErrorMessages.INVALID_PASSWORD_UPPERCASE;
   }
   if (!hasLowercaseLetter) {
-    return AuthErrors.INVALID_PASSWORD_LOWERCASE;
+    return ErrorMessages.INVALID_PASSWORD_LOWERCASE;
   }
   if (!hasNumber) {
-    return AuthErrors.INVALID_PASSWORD_NUMBER;
+    return ErrorMessages.INVALID_PASSWORD_NUMBER;
   }
   if (!hasSpecialCharacter) {
-    return AuthErrors.INVALID_PASSWORD_SPECIAL;
+    return ErrorMessages.INVALID_PASSWORD_SPECIAL;
   }
 
   return true;
 };
 
-export const getErrorMessage = (errorCode: string): string => {
-  return firebaseErrorMessages[errorCode] ?? AuthErrors.UNKNOWN_ERROR;
+export const getErrorMessage = (error: Error | FirebaseError): string => {
+  if (error instanceof FirebaseError) {
+    return firebaseErrorMessages[error.code] ?? ErrorMessages.UNKNOWN_ERROR;
+  }
+
+  return ErrorMessages.UNKNOWN_ERROR;
 };

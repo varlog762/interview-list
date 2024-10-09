@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { v4 as uuidv4 } from 'uuid';
 
+import useQuasarNotify from 'src/composables/useQuasarNotify';
 import type { InterviewInputInterface } from 'src/models';
+import { createInterview } from 'src/services/firebase';
+import { ToastTypes } from 'src/enums';
+import { getErrorMessage } from 'src/utils';
 
-defineOptions({ name: 'IndexPage' });
+defineOptions({ name: 'AddInterviewPage' });
+const showToast = useQuasarNotify();
 
 const companyName = ref<string>('');
 const vacancyLink = ref<string>('');
@@ -14,7 +20,7 @@ const hrPhoneNumber = ref<string>('');
 
 const isLoading = ref<boolean>(false);
 const isFormInvalid = computed<boolean>(() => {
-  return true;
+  return !(companyName.value && vacancyLink.value && hrName.value);
 });
 
 const validateRequiredInput = (inputValue: string): boolean | string =>
@@ -22,7 +28,7 @@ const validateRequiredInput = (inputValue: string): boolean | string =>
 
 const onSubmit = async () => {
   const interviewInput: InterviewInputInterface = {
-    id: '123',
+    id: uuidv4(),
     companyName: companyName.value,
     vacancyLink: vacancyLink.value,
     hrName: hrName.value,
@@ -31,6 +37,17 @@ const onSubmit = async () => {
     hrPhoneNumber: hrPhoneNumber.value,
     createdAt: new Date(),
   };
+
+  try {
+    isLoading.value = true;
+    await createInterview(interviewInput);
+  } catch (error) {
+    console.dir(error);
+    const errorMessage = getErrorMessage(error as Error);
+    showToast(ToastTypes.NEGATIVE, errorMessage);
+  } finally {
+    isLoading.value = false;
+  }
 };
 </script>
 
@@ -44,40 +61,28 @@ const onSubmit = async () => {
           class="first-field field"
           filled
           type="text"
-          label-slot
+          label="Company name *"
           v-model="companyName"
           lazy-rules
-          :rules="[validateRequiredInput]">
-          <template v-slot:label>
-            <strong>Company name *</strong>
-          </template>
-        </q-input>
+          :rules="[validateRequiredInput]" />
 
         <q-input
           class="field"
           filled
           type="text"
           v-model="vacancyLink"
-          label-slot
+          label="Job listing link *"
           lazy-rules
-          :rules="[validateRequiredInput]">
-          <template v-slot:label>
-            <strong>Job listing link *</strong>
-          </template>
-        </q-input>
+          :rules="[validateRequiredInput]" />
 
         <q-input
           class="field"
           filled
           type="text"
           v-model="hrName"
-          label-slot
+          label="HR name *"
           lazy-rules
-          :rules="[validateRequiredInput]">
-          <template v-slot:label>
-            <strong>HR name *</strong>
-          </template>
-        </q-input>
+          :rules="[validateRequiredInput]" />
 
         <q-input
           class="field"

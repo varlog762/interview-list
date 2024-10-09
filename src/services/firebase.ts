@@ -6,7 +6,11 @@ import {
   signInWithEmailAndPassword,
   signOut,
   UserCredential,
+  Auth,
 } from 'firebase/auth';
+import { getFirestore, getDoc, doc, setDoc } from 'firebase/firestore';
+
+import { InterviewInputInterface } from 'src/models';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -19,6 +23,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const db = getFirestore();
 
 export const firebaseSignUp = (
   email: string,
@@ -38,5 +43,18 @@ export const firebaseSignIn = (
 
 export const firebaseSignOut = () => {
   const auth = getAuth();
-  signOut(getAuth());
+  signOut(auth);
+};
+
+export const createInterview = async (
+  interviewInput: InterviewInputInterface
+): Promise<void> => {
+  const userId = await getAuth().currentUser?.uid;
+
+  if (!userId) return;
+
+  await setDoc(
+    doc(db, `users/${userId}/interviews`, interviewInput.id),
+    interviewInput
+  );
 };

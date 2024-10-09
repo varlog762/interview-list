@@ -14,7 +14,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: RoutePaths.ADD,
         name: RouteNames.ADD,
-        component: () => import('pages/IndexPage.vue'),
+        component: () => import('pages/AddInterviewPage.vue'),
       },
       {
         path: RoutePaths.INTERVIEWS,

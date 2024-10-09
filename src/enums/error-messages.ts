@@ -1,4 +1,4 @@
-export enum AuthErrors {
+export enum ErrorMessages {
   INVALID_EMAIL = 'The email address is invalid',
   EMAIL_ALREADY_IN_USE = 'This email is already in use',
   ENTER_PASSWORD = 'Please enter a password',
@@ -11,5 +11,6 @@ export enum AuthErrors {
   PASSWORDS_DONT_MATCH = 'Passwords do not match',
   INVALID_CREDENTIALS = 'Invalid email or password',
   ACCOUNT_DISABLED = 'This user account has been disabled',
+  PERMISSION_DENIED = 'Permission denied',
   UNKNOWN_ERROR = 'An unknown error occurred',
 }
