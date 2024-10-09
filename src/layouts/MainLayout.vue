@@ -20,7 +20,9 @@
       </q-toolbar>
     </q-header>
     <q-page-container>
-      <router-view />
+      <q-page>
+        <router-view />
+      </q-page>
     </q-page-container>
   </q-layout>
 </template>
