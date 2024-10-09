@@ -63,10 +63,6 @@ const onSubmit = async () => {
 </template>
 
 <style lang="scss" scoped>
-.form-wrapper {
-  margin-top: 15%;
-}
-
 .q-pa-md {
   margin: 0 auto;
 }

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 
+import type { InterviewInputInterface } from 'src/models';
+
 defineOptions({ name: 'IndexPage' });
 
 const companyName = ref<string>('');
@@ -18,7 +20,18 @@ const isFormInvalid = computed<boolean>(() => {
 const validateRequiredInput = (inputValue: string): boolean | string =>
   !!inputValue || 'Field is required';
 
-const onSubmit = async () => {};
+const onSubmit = async () => {
+  const interviewInput: InterviewInputInterface = {
+    id: '123',
+    companyName: companyName.value,
+    vacancyLink: vacancyLink.value,
+    hrName: hrName.value,
+    telegramUsername: telegramUsername.value,
+    whatsAppUsername: whatsAppUsername.value,
+    hrPhoneNumber: hrPhoneNumber.value,
+    createdAt: new Date(),
+  };
+};
 </script>
 
 <template>
