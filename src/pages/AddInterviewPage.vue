@@ -42,7 +42,6 @@ const onSubmit = async () => {
     isLoading.value = true;
     await createInterview(interviewInput);
   } catch (error) {
-    console.dir(error);
     const errorMessage = getErrorMessage(error as Error);
     showToast(ToastTypes.NEGATIVE, errorMessage);
   } finally {
@@ -96,7 +95,7 @@ const onSubmit = async () => {
           filled
           type="text"
           v-model="whatsAppUsername"
-          label="WhatsApp Username" />
+          label="WhatsApp username" />
 
         <q-input
           class="field"

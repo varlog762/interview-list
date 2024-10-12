@@ -6,7 +6,6 @@ import {
   signInWithEmailAndPassword,
   signOut,
   UserCredential,
-  Auth,
 } from 'firebase/auth';
 import { getFirestore, getDoc, doc, setDoc } from 'firebase/firestore';
 
@@ -49,9 +48,11 @@ export const firebaseSignOut = () => {
 export const createInterview = async (
   interviewInput: InterviewInputInterface
 ): Promise<void> => {
-  const userId = await getAuth().currentUser?.uid;
+  // const userId = 'FMKw5wsQyCWKkAPvBbiQd1XP6Kk2';
+  const userId = getAuth().currentUser?.uid;
 
   if (!userId) return;
+  console.log(userId);
 
   await setDoc(
     doc(db, `users/${userId}/interviews`, interviewInput.id),

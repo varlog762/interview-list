@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { defineStore } from 'pinia';
-import { UserCredential } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, UserCredential } from 'firebase/auth';
 
 import {} from 'src/enums';
 import {
@@ -23,6 +23,12 @@ export const useUserStore = defineStore('user', () => {
   const isLoading = ref<boolean>(false);
   const isLoggedIn = computed<boolean>(() => !!userId.value);
 
+  const initAuth = (): void => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, user => {
+      userId.value = user?.uid ?? null;
+    });
+  };
   const signUp = (authInput: AuthInputInterface): void => {
     handleAuth(authInput, firebaseSignUp);
   };
