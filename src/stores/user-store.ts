@@ -19,15 +19,13 @@ export const useUserStore = defineStore('user', () => {
   const router = useRouter();
   const showToast = useQuasarNotify();
 
-  const userId = ref<string | null>('null');
+  const userId = ref<string | null>(null);
   const isLoading = ref<boolean>(false);
   const isLoggedIn = computed<boolean>(() => !!userId.value);
 
   const initAuth = (): void => {
     const auth = getAuth();
-    onAuthStateChanged(auth, user => {
-      userId.value = user?.uid ?? null;
-    });
+    onAuthStateChanged(auth, user => (userId.value = user?.uid ?? null));
   };
   const signUp = (authInput: AuthInputInterface): void => {
     handleAuth(authInput, firebaseSignUp);
@@ -58,6 +56,7 @@ export const useUserStore = defineStore('user', () => {
     userId,
     isLoading,
     isLoggedIn,
+    initAuth,
     signUp,
     signIn,
   };

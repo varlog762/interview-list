@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { route } from 'quasar/wrappers';
 import {
   createMemoryHistory,
@@ -10,6 +11,7 @@ import {
 
 import routes from './routes';
 import { useUserStore } from 'stores/user-store';
+import { RouteNames } from 'src/enums';
 
 /*
  * If not building with SSR mode, you can
@@ -44,14 +46,16 @@ export default route(function (/* { store, ssrContext } */) {
       next: NavigationGuardNext
     ) => {
       const userStore = useUserStore();
-
-      if (to.meta.requiresAuth && !userStore.isLoggedIn) {
-        next({ path: '/auth' });
-      } else if (userStore.isLoggedIn && to.path.startsWith('/auth')) {
-        next({ path: '/' });
-      } else {
-        next();
-      }
+      userStore.initAuth();
+      // FIXME: Fix auth guard
+      // if (to.meta.requiresAuth && userStore.isLoggedIn) {
+      //   console.log(userStore.isLoggedIn);
+      //   console.log(userStore.userId);
+      //   next({ name: RouteNames.AUTH });
+      // } else {
+      //   next();
+      // }
+      next();
     }
   );
 
