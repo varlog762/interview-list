@@ -12,7 +12,7 @@
         </q-tabs>
         <q-space />
         <q-btn
-          @click="userStore.userId = null"
+          @click="signOut"
           square
           color="primary"
           icon="logout"
@@ -28,11 +28,12 @@
 </template>
 
 <script setup lang="ts">
-import { MenuItemInterface } from 'src/models/menu-item.interface';
 import { ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 
+import type { MenuItemInterface } from 'src/models/menu-item.interface';
 import { useUserStore } from 'stores/user-store';
+import { firebaseSignOut } from 'src/services/firebase';
 import { RouteNames } from 'src/enums';
 
 defineOptions({
@@ -45,12 +46,16 @@ const router = useRouter();
 const route = useRoute();
 
 const menuItems: MenuItemInterface[] = [
-  { label: 'Add', icon: 'add', path: '' },
   { label: 'Interviews', icon: 'list', path: 'interviews' },
+  { label: 'Add', icon: 'add', path: 'add' },
   { label: 'Statistics', icon: 'bar_chart', path: 'statistics' },
 ];
 
 const tab = ref(route.path.slice(1));
+
+const signOut = () => {
+  firebaseSignOut();
+};
 
 watch(tab, newRoute => {
   router.push(`/${newRoute}`);

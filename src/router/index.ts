@@ -40,22 +40,26 @@ export default route(function (/* { store, ssrContext } */) {
   });
 
   Router.beforeEach(
-    (
+    async (
       to: RouteLocationNormalized,
       from: RouteLocationNormalized,
       next: NavigationGuardNext
     ) => {
       const userStore = useUserStore();
-      userStore.initAuth();
+
+      if (!userStore.authReady) {
+        await userStore.initAuth();
+      }
+
       // FIXME: Fix auth guard
-      // if (to.meta.requiresAuth && userStore.isLoggedIn) {
-      //   console.log(userStore.isLoggedIn);
-      //   console.log(userStore.userId);
-      //   next({ name: RouteNames.AUTH });
-      // } else {
-      //   next();
-      // }
-      next();
+      if (to.meta.requiresAuth && !userStore.isLoggedIn) {
+        console.log(userStore.isLoggedIn);
+        console.log(userStore.userId);
+        next({ name: RouteNames.AUTH });
+      } else {
+        next();
+      }
+      // next();
     }
   );
 

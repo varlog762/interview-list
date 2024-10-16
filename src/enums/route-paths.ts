@@ -1,6 +1,6 @@
 export enum RoutePaths {
   ROOT = '/',
-  ADD = '',
+  ADD = 'add',
   INTERVIEWS = 'interviews',
   STATISTICS = 'statistics',
   AUTH = '/auth',

@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 import { v4 as uuidv4 } from 'uuid';
 
 import useQuasarNotify from 'src/composables/useQuasarNotify';
+import { useUserStore } from 'src/stores/user-store';
 import type { InterviewInputInterface } from 'src/models';
 import { createInterview } from 'src/services/firebase';
 import { ToastTypes } from 'src/enums';
@@ -12,6 +13,7 @@ import { RouteNames } from 'src/enums';
 
 defineOptions({ name: 'AddInterviewPage' });
 const router = useRouter();
+const userStore = useUserStore();
 const showToast = useQuasarNotify();
 
 const companyName = ref<string>('');
@@ -43,7 +45,7 @@ const onSubmit = async () => {
 
   try {
     isLoading.value = true;
-    await createInterview(interviewInput);
+    await createInterview(userStore.userId as string, interviewInput);
     router.push({ name: RouteNames.INTERVIEWS });
   } catch (error) {
     const errorMessage = getErrorMessage(error as Error);

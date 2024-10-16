@@ -7,9 +7,19 @@ import {
   signOut,
   UserCredential,
 } from 'firebase/auth';
-import { getFirestore, getDoc, doc, setDoc } from 'firebase/firestore';
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  collection,
+  query,
+  orderBy,
+  deleteDoc,
+  getDocs,
+} from 'firebase/firestore';
+import { get } from 'http';
 
-import { InterviewInputInterface } from 'src/models';
+import type { InterviewInputInterface } from 'src/models';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -46,11 +56,9 @@ export const firebaseSignOut = () => {
 };
 
 export const createInterview = async (
+  userId: string,
   interviewInput: InterviewInputInterface
 ): Promise<void> => {
-  // const userId = 'FMKw5wsQyCWKkAPvBbiQd1XP6Kk2';
-  const userId = getAuth().currentUser?.uid;
-
   if (!userId) return;
   console.log(userId);
 
@@ -58,4 +66,16 @@ export const createInterview = async (
     doc(db, `users/${userId}/interviews`, interviewInput.id),
     interviewInput
   );
+};
+
+export const getAllInterviews = async (
+  userId: string
+): Promise<InterviewInputInterface[]> => {
+  const requestQuery = query(
+    collection(db, `users/${userId}/interviews`),
+    orderBy('createdAt', 'desc')
+  );
+
+  const response = await getDocs(requestQuery);
+  return response.docs.map(doc => doc.data() as InterviewInputInterface);
 };

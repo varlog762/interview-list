@@ -5,15 +5,12 @@ import { defineStore } from 'pinia';
 import { getAuth, onAuthStateChanged, UserCredential } from 'firebase/auth';
 
 import {} from 'src/enums';
-import {
-  firebaseSignUp,
-  firebaseSignIn,
-  firebaseSignOut,
-} from 'src/services/firebase';
+import { firebaseSignUp, firebaseSignIn } from 'src/services/firebase';
 import { getErrorMessage } from 'src/utils';
 import type { AuthInputInterface } from 'src/models/auth-input.interface';
 import { RouteNames, ToastTypes } from 'src/enums';
 import useQuasarNotify from 'src/composables/useQuasarNotify';
+import { resolve } from 'dns';
 
 export const useUserStore = defineStore('user', () => {
   const router = useRouter();
@@ -21,12 +18,20 @@ export const useUserStore = defineStore('user', () => {
 
   const userId = ref<string | null>(null);
   const isLoading = ref<boolean>(false);
+  const authReady = ref<boolean>(false);
   const isLoggedIn = computed<boolean>(() => !!userId.value);
 
-  const initAuth = (): void => {
+  const initAuth = async (): Promise<void> => {
     const auth = getAuth();
-    onAuthStateChanged(auth, user => (userId.value = user?.uid ?? null));
+    return new Promise<void>(resolve => {
+      onAuthStateChanged(auth, user => {
+        userId.value = user?.uid ?? null;
+        authReady.value = true;
+        resolve();
+      });
+    });
   };
+
   const signUp = (authInput: AuthInputInterface): void => {
     handleAuth(authInput, firebaseSignUp);
   };
@@ -43,7 +48,7 @@ export const useUserStore = defineStore('user', () => {
       isLoading.value = true;
       const { email, password } = authInput;
       await authCallback(email, password);
-      router.push({ name: RouteNames.ROOT });
+      router.replace({ name: RouteNames.ROOT });
     } catch (error) {
       const errorMessage = getErrorMessage(error as Error);
       showToast(ToastTypes.NEGATIVE, errorMessage);
@@ -54,6 +59,7 @@ export const useUserStore = defineStore('user', () => {
 
   return {
     userId,
+    authReady,
     isLoading,
     isLoggedIn,
     initAuth,

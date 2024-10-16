@@ -10,6 +10,7 @@ const routes: RouteRecordRaw[] = [
     name: RouteNames.ROOT,
     component: MainLayout,
     meta: { requiresAuth: true },
+    redirect: RoutePaths.INTERVIEWS,
     children: [
       {
         path: RoutePaths.ADD,
@@ -19,7 +20,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: RoutePaths.INTERVIEWS,
         name: RouteNames.INTERVIEWS,
-        component: () => import('pages/InterviewsPage.vue'),
+        component: () => import('pages/InterviewListPage.vue'),
       },
       {
         path: RoutePaths.STATISTICS,
