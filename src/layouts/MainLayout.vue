@@ -40,7 +40,6 @@ defineOptions({
   name: 'MainLayout',
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const userStore = useUserStore();
 const router = useRouter();
 const route = useRoute();

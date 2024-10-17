@@ -4,13 +4,10 @@ import { useRouter } from 'vue-router';
 import { defineStore } from 'pinia';
 import { getAuth, onAuthStateChanged, UserCredential } from 'firebase/auth';
 
-import {} from 'src/enums';
 import { firebaseSignUp, firebaseSignIn } from 'src/services/firebase';
-import { getErrorMessage } from 'src/utils';
 import type { AuthInputInterface } from 'src/models/auth-input.interface';
-import { RouteNames, ToastTypes } from 'src/enums';
+import { RoutePaths } from 'src/enums';
 import useQuasarNotify from 'src/composables/useQuasarNotify';
-import { resolve } from 'dns';
 
 export const useUserStore = defineStore('user', () => {
   const router = useRouter();
@@ -48,10 +45,9 @@ export const useUserStore = defineStore('user', () => {
       isLoading.value = true;
       const { email, password } = authInput;
       await authCallback(email, password);
-      router.replace({ name: RouteNames.ROOT });
+      router.replace({ path: `${RoutePaths.ROOT}${RoutePaths.INTERVIEWS}` });
     } catch (error) {
-      const errorMessage = getErrorMessage(error as Error);
-      showToast(ToastTypes.NEGATIVE, errorMessage);
+      showToast(error as Error);
     } finally {
       isLoading.value = false;
     }

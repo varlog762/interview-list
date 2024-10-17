@@ -7,8 +7,6 @@ import useQuasarNotify from 'src/composables/useQuasarNotify';
 import { useUserStore } from 'src/stores/user-store';
 import type { InterviewInputInterface } from 'src/models';
 import { createInterview } from 'src/services/firebase';
-import { ToastTypes } from 'src/enums';
-import { getErrorMessage } from 'src/utils';
 import { RouteNames } from 'src/enums';
 
 defineOptions({ name: 'AddInterviewPage' });
@@ -48,8 +46,7 @@ const onSubmit = async () => {
     await createInterview(userStore.userId as string, interviewInput);
     router.push({ name: RouteNames.INTERVIEWS });
   } catch (error) {
-    const errorMessage = getErrorMessage(error as Error);
-    showToast(ToastTypes.NEGATIVE, errorMessage);
+    showToast(error as Error);
   } finally {
     isLoading.value = false;
   }

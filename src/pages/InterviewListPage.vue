@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue';
 
 import type { InterviewInputInterface } from 'src/models';
 import { useUserStore } from 'src/stores/user-store';
+import useQuasarNotify from 'src/composables/useQuasarNotify';
 import { getAllInterviews } from 'src/services/firebase';
 
 defineOptions({
@@ -10,6 +11,7 @@ defineOptions({
 });
 
 const userStore = useUserStore();
+const showToast = useQuasarNotify();
 
 const interviews = ref<InterviewInputInterface[]>([]);
 const isLoading = ref<boolean>(true);
@@ -18,7 +20,7 @@ onMounted(async () => {
   try {
     interviews.value = await getAllInterviews(userStore.userId as string);
   } catch (error) {
-    console.error(error);
+    showToast(error as Error);
   } finally {
     isLoading.value = false;
   }
