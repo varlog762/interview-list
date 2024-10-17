@@ -55,7 +55,7 @@ const onSubmit = async () => {
 
 <template>
   <div class="form-wrapper">
-    <div class="q-pa-md" style="max-width: 500px">
+    <div class="q-pa-md q-mx-auto" style="max-width: 500px">
       <h2 class="title-md">Add new interview</h2>
       <q-form @submit="onSubmit" class="q-gutter-md">
         <div class="required-tip">* - required fields</div>
