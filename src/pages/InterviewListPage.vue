@@ -5,6 +5,7 @@ import type { InterviewInputInterface } from 'src/models';
 import { useUserStore } from 'src/stores/user-store';
 import useQuasarNotify from 'src/composables/useQuasarNotify';
 import { getAllInterviews } from 'src/services/firebase';
+import SpinnerComponent from 'src/components/SpinnerComponent.vue';
 
 defineOptions({
   name: 'InterviewListPage',
@@ -28,7 +29,12 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>INTERVIEWS</div>
+  <spinner-component v-if="isLoading"></spinner-component>
+  <template v-else>
+    <template v-if="interviews.length"></template>
+    <!-- TODO: implement this -->
+    <template v-else>THERE ARE NO INTERVIEWS</template>
+  </template>
 </template>
 
 <style lang="scss" scoped></style>
