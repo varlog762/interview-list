@@ -33,20 +33,18 @@ const columns: TableColumnsInterface[] = [
     field: 'vacancyLink',
     align: 'left',
   },
-  { name: 'fat', label: 'Fat (g)', field: 'fat' },
-  { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-  { name: 'protein', label: 'Protein (g)', field: 'protein' },
-  { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
+  { name: 'hrName', label: "HR's name", field: 'hrName' },
   {
-    name: 'calcium',
-    label: 'Calcium (%)',
-    field: 'calcium',
+    name: 'telegramUsername',
+    label: 'Telegram username',
+    field: 'telegramUsername',
   },
   {
-    name: 'iron',
-    label: 'Iron (%)',
-    field: 'iron',
+    name: 'whatsAppUsername',
+    label: 'WhatsApp username',
+    field: 'whatsAppUsername',
   },
+  { name: 'hrPhoneNumber', label: 'Phone number', field: 'hrPhoneNumber' },
 ];
 
 onMounted(async () => {
