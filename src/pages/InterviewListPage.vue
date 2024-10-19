@@ -134,15 +134,17 @@ onMounted(async () => {
               </q-td>
             </template>
 
-            <template #body-cell-controls>
-              <q-td class="flex justify-end">
-                <q-btn
-                  class="q-mr-sm"
-                  flat
-                  dense
-                  color="info"
-                  label="edit"
-                  @click="() => {}" />
+            <template #body-cell-controls="props">
+              <q-td :props="props" class="flex justify-end">
+                <router-link :to="`/auth/interview:${props.row.id}`">
+                  <q-btn
+                    class="q-mr-sm"
+                    flat
+                    dense
+                    color="info"
+                    label="edit"
+                    @click="() => {}" />
+                </router-link>
                 <q-btn
                   flat
                   dense

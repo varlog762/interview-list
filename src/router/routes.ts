@@ -27,6 +27,11 @@ const routes: RouteRecordRaw[] = [
         name: RouteNames.STATISTICS,
         component: () => import('pages/StatisticsPage.vue'),
       },
+      {
+        path: RoutePaths.INTERVIEW,
+        name: RouteNames.INTERVIEW,
+        component: () => import('pages/InterviewPage.vue'),
+      },
     ],
   },
   {
