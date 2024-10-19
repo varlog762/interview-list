@@ -38,6 +38,12 @@ const columns: TableColumnsInterface[] = [
     name: 'contacts',
     label: 'Contacts',
     field: 'contacts',
+    align: 'center',
+  },
+  {
+    name: 'controls',
+    label: '',
+    field: 'controls',
   },
 ];
 
@@ -60,22 +66,21 @@ onMounted(async () => {
         <h2 class="title-md">Your interviews</h2>
         <div class="q-pa-md">
           <q-table :rows="interviews" :columns="columns" row-key="name">
-            <!-- Custom slot for companyName -->
-            <template v-slot:body-cell-companyName="props">
+            <template #body-cell-companyName="props">
               <q-td :props="props">
-                <strong>{{ props.row.companyName }}</strong>
+                <span class="text-body2">{{ props.row.companyName }}</span>
               </q-td>
             </template>
 
-            <template v-slot:body-cell-hrName="props">
+            <template #body-cell-hrName="props">
               <q-td :props="props">
-                <q-badge color="primary">
+                <q-badge color="primary" class="text-body2">
                   {{ props.row.hrName }}
                 </q-badge>
               </q-td>
             </template>
 
-            <template v-slot:body-cell-vacancyLink="props">
+            <template #body-cell-vacancyLink="props">
               <q-td :props="props">
                 <q-btn
                   flat
@@ -88,7 +93,7 @@ onMounted(async () => {
               </q-td>
             </template>
 
-            <template v-slot:body-cell-telegramUsername="props">
+            <template #body-cell-telegramUsername="props">
               <q-td :props="props">
                 <a
                   :href="`https://t.me/${props.row.telegramUsername}`"
@@ -97,14 +102,18 @@ onMounted(async () => {
                 </a>
               </q-td>
             </template>
-            <template v-slot:body-cell-contacts="props">
+
+            <template #body-cell-contacts="props">
               <q-td :props="props">
-                <div class="flex justify-end q-gutter-xs">
+                <div class="flex justify-center q-gutter-sm">
                   <a
                     v-if="props.row.telegramUsername"
                     :href="`https://t.me/${props.row.telegramUsername}`"
                     target="_blank">
-                    <q-icon size="sm" name="telegram" color="primary" />
+                    <q-icon
+                      size="sm"
+                      name="fa-brands fa-telegram"
+                      color="primary" />
                   </a>
                   <a
                     v-if="props.row.whatsAppUsername"
@@ -116,9 +125,30 @@ onMounted(async () => {
                     v-if="props.row.hrPhoneNumber"
                     :href="`tel:${props.row.hrPhoneNumber}`"
                     target="_blank">
-                    <q-icon size="sm" name="phone" color="info" />
+                    <q-icon
+                      size="sm"
+                      name="fa-solid fa-phone"
+                      color="secondary" />
                   </a>
                 </div>
+              </q-td>
+            </template>
+
+            <template #body-cell-controls>
+              <q-td class="flex justify-end">
+                <q-btn
+                  class="q-mr-sm"
+                  flat
+                  dense
+                  color="info"
+                  label="edit"
+                  @click="() => {}" />
+                <q-btn
+                  flat
+                  dense
+                  color="negative"
+                  label="delete"
+                  @click="() => {}" />
               </q-td>
             </template>
           </q-table>
