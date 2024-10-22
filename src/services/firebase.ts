@@ -17,7 +17,6 @@ import {
   deleteDoc,
   getDocs,
 } from 'firebase/firestore';
-import { get } from 'http';
 
 import type { InterviewInputInterface } from 'src/models';
 
@@ -60,7 +59,6 @@ export const createInterview = async (
   interviewInput: InterviewInputInterface
 ): Promise<void> => {
   if (!userId) return;
-  console.log(userId);
 
   await setDoc(
     doc(db, `users/${userId}/interviews`, interviewInput.id),
@@ -78,4 +76,11 @@ export const getAllInterviews = async (
 
   const response = await getDocs(requestQuery);
   return response.docs.map(doc => doc.data() as InterviewInputInterface);
+};
+
+export const deleteInterview = async (
+  userId: string,
+  interviewId: string
+): Promise<void> => {
+  await deleteDoc(doc(db, `users/${userId}/interviews`, interviewId));
 };

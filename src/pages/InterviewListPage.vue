@@ -9,6 +9,7 @@ import { useUserStore } from 'src/stores/user-store';
 import useQuasarNotify from 'src/composables/useQuasarNotify';
 import { getAllInterviews } from 'src/services/firebase';
 import SpinnerComponent from 'src/components/SpinnerComponent.vue';
+import { RouteNames } from 'src/enums';
 
 defineOptions({
   name: 'InterviewListPage',
@@ -47,7 +48,7 @@ const columns: TableColumnsInterface[] = [
   },
 ];
 
-onMounted(async () => {
+const loadInterviews = async () => {
   try {
     interviews.value = await getAllInterviews(userStore.userId as string);
   } catch (error) {
@@ -55,6 +56,13 @@ onMounted(async () => {
   } finally {
     isLoading.value = false;
   }
+};
+const confirmDeleteInterview = (id: string) => {
+  console.log(id);
+};
+
+onMounted(() => {
+  loadInterviews();
 });
 </script>
 
@@ -136,7 +144,11 @@ onMounted(async () => {
 
             <template #body-cell-controls="props">
               <q-td :props="props" class="flex justify-end">
-                <router-link :to="`/auth/interview:${props.row.id}`">
+                <router-link
+                  :to="{
+                    name: RouteNames.INTERVIEW,
+                    params: { id: props.row.id },
+                  }">
                   <q-btn
                     class="q-mr-sm"
                     flat
