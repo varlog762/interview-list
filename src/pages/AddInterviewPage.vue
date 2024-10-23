@@ -8,6 +8,7 @@ import { useUserStore } from 'src/stores/user-store';
 import type { InterviewInputInterface } from 'src/models';
 import { createInterview } from 'src/services/firebase';
 import { RouteNames } from 'src/enums';
+import { validateRequiredInput } from 'src/utils';
 
 defineOptions({ name: 'AddInterviewPage' });
 const router = useRouter();
@@ -25,9 +26,6 @@ const isLoading = ref<boolean>(false);
 const isFormInvalid = computed<boolean>(() => {
   return !(companyName.value && vacancyLink.value && hrName.value);
 });
-
-const validateRequiredInput = (inputValue: string): boolean | string =>
-  !!inputValue || 'Field is required';
 
 const onSubmit = async () => {
   const interviewInput: InterviewInputInterface = {
