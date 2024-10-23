@@ -33,7 +33,7 @@ const cancel = () => {
 </script>
 
 <template>
-  <q-dialog v-model="localVisible" persistent>
+  <q-dialog v-model="localVisible">
     <q-card>
       <q-card-section class="row items-center">
         <q-avatar icon="fa-solid fa-trash" color="primary" text-color="white" />

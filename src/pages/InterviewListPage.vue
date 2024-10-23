@@ -202,6 +202,7 @@ onMounted(() => {
     <confirmation-popup-component
       :isVisible="isPopupVisible"
       @cancel="cancelDeletion"
+      @hide="cancelDeletion"
       @confirm="confirmDeletion">
       Confirm deletion of this interview?
     </confirmation-popup-component>
