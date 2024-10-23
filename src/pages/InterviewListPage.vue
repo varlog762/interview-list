@@ -9,6 +9,7 @@ import { useUserStore } from 'src/stores/user-store';
 import useQuasarNotify from 'src/composables/useQuasarNotify';
 import { getAllInterviews } from 'src/services/firebase';
 import SpinnerComponent from 'src/components/SpinnerComponent.vue';
+import ConfirmationPopupComponent from 'src/components/ConfirmationPopupComponent.vue';
 import { RouteNames } from 'src/enums';
 
 defineOptions({
@@ -19,7 +20,9 @@ const userStore = useUserStore();
 const showToast = useQuasarNotify();
 
 const interviews = ref<InterviewInputInterface[]>([]);
+const interviewIdToDelete = ref<string | null>(null);
 const isLoading = ref<boolean>(true);
+const isPopupVisible = ref<boolean>(false);
 
 const columns: TableColumnsInterface[] = [
   {
@@ -39,7 +42,7 @@ const columns: TableColumnsInterface[] = [
     name: 'contacts',
     label: 'Contacts',
     field: 'contacts',
-    align: 'center',
+    align: 'right',
   },
   {
     name: 'controls',
@@ -57,8 +60,14 @@ const loadInterviews = async () => {
     isLoading.value = false;
   }
 };
-const confirmDeleteInterview = (id: string) => {
-  console.log(id);
+const showInterviewDeletionPopup = (id: string) => {
+  interviewIdToDelete.value = id;
+  isPopupVisible.value = true;
+};
+
+const cancelDeletion = () => {
+  interviewIdToDelete.value = null;
+  isPopupVisible.value = false;
 };
 
 onMounted(() => {
@@ -113,7 +122,7 @@ onMounted(() => {
 
             <template #body-cell-contacts="props">
               <q-td :props="props">
-                <div class="flex justify-center q-gutter-sm">
+                <div class="flex justify-end q-gutter-sm">
                   <a
                     v-if="props.row.telegramUsername"
                     :href="`https://t.me/${props.row.telegramUsername}`"
@@ -162,7 +171,7 @@ onMounted(() => {
                   dense
                   color="negative"
                   label="delete"
-                  @click="() => {}" />
+                  @click="showInterviewDeletionPopup(props.row.id)" />
               </q-td>
             </template>
           </q-table>
@@ -171,6 +180,14 @@ onMounted(() => {
     </template>
     <!-- TODO: implement this component-->
     <template v-else>THERE ARE NO INTERVIEWS</template>
+
+    <!-- Delete confirmation popup -->
+    <confirmation-popup-component
+      :isVisible="isPopupVisible"
+      @cancel="cancelDeletion"
+      @confirm="() => {}">
+      Confirm deletion of this interview?
+    </confirmation-popup-component>
   </template>
 </template>
 
