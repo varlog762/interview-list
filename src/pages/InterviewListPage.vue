@@ -7,7 +7,7 @@ import type {
 } from 'src/models';
 import { useUserStore } from 'src/stores/user-store';
 import useQuasarNotify from 'src/composables/useQuasarNotify';
-import { getAllInterviews } from 'src/services/firebase';
+import { getAllInterviews, deleteInterview } from 'src/services/firebase';
 import SpinnerComponent from 'src/components/SpinnerComponent.vue';
 import ConfirmationPopupComponent from 'src/components/ConfirmationPopupComponent.vue';
 import { RouteNames } from 'src/enums';
@@ -68,6 +68,23 @@ const showInterviewDeletionPopup = (id: string) => {
 const cancelDeletion = () => {
   interviewIdToDelete.value = null;
   isPopupVisible.value = false;
+};
+
+const confirmDeletion = async () => {
+  isPopupVisible.value = false;
+  isLoading.value = true;
+
+  try {
+    if (interviewIdToDelete.value && userStore.userId) {
+      await deleteInterview(userStore.userId, interviewIdToDelete.value);
+    }
+    loadInterviews();
+  } catch (error) {
+    showToast(error as Error);
+  } finally {
+    interviewIdToDelete.value = null;
+    isLoading.value = false;
+  }
 };
 
 onMounted(() => {
@@ -185,7 +202,7 @@ onMounted(() => {
     <confirmation-popup-component
       :isVisible="isPopupVisible"
       @cancel="cancelDeletion"
-      @confirm="() => {}">
+      @confirm="confirmDeletion">
       Confirm deletion of this interview?
     </confirmation-popup-component>
   </template>
