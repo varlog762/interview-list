@@ -1,6 +1,5 @@
-<!-- eslint-disable @typescript-eslint/no-unused-vars -->
 <script setup lang="ts">
-import { ref, computed, reactive, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 import type { InterviewInputInterface } from 'src/models';
@@ -26,6 +25,13 @@ const hrName = ref<string>('');
 const telegramUsername = ref<string>('');
 const whatsAppUsername = ref<string>('');
 const hrPhoneNumber = ref<string>('');
+const minSalary = ref<number>(0);
+const maxSalary = ref<number>(0);
+const result = ref<'offer' | 'reject' | null>(null);
+
+const isSalaryInvalid = computed<boolean>(() => {
+  return minSalary.value > maxSalary.value;
+});
 
 const isLoading = ref<boolean>(true);
 const isFormInvalid = computed<boolean>(() => {
@@ -116,8 +122,47 @@ onMounted(() => loadInterview());
           v-model="hrPhoneNumber"
           label="Phone number" />
 
+        <div class="flex q-col-gutter-sm ml-8">
+          <q-input
+            class="col pt-0"
+            :error="isSalaryInvalid"
+            filled
+            type="number"
+            v-model="minSalary"
+            label="Minimum salary">
+            <template #error>Invalid salary</template>
+          </q-input>
+
+          <q-input
+            class="col pt-0"
+            :error="isSalaryInvalid"
+            filled
+            type="number"
+            v-model="maxSalary"
+            label="Maximum salary" />
+        </div>
+
+        <div class="q-gutter-x-sm ml-8 mt-0">
+          <q-radio
+            v-model="result"
+            val="reject"
+            checked-icon="task_alt"
+            unchecked-icon="panorama_fish_eye"
+            color="negative">
+            <div class="text-subtitle1">Reject</div>
+          </q-radio>
+          <q-radio
+            v-model="result"
+            val="offer"
+            checked-icon="task_alt"
+            unchecked-icon="panorama_fish_eye"
+            color="positive"
+            ><div class="text-subtitle1">Offer</div></q-radio
+          >
+        </div>
+
         <q-btn
-          label="add interview"
+          label="save interview"
           type="submit"
           color="primary"
           :disable="isFormInvalid"
@@ -128,9 +173,18 @@ onMounted(() => loadInterview());
 </template>
 
 <style lang="scss" scoped>
-.form-wrapper {
+.ml-8 {
+  margin-left: 8px;
+}
+
+.mt-0 {
+  margin-top: 0;
+}
+
+.pt-0 {
   padding-top: 0;
 }
+
 .title-md {
   margin-bottom: 50px;
 }

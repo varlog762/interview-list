@@ -42,7 +42,7 @@ const columns: TableColumnsInterface[] = [
     name: 'contacts',
     label: 'Contacts',
     field: 'contacts',
-    align: 'right',
+    align: 'left',
   },
   {
     name: 'controls',
@@ -139,7 +139,7 @@ onMounted(() => {
 
             <template #body-cell-contacts="props">
               <q-td :props="props">
-                <div class="flex justify-end q-gutter-sm">
+                <div class="flex justify-start q-gutter-sm">
                   <a
                     v-if="props.row.telegramUsername"
                     :href="`https://t.me/${props.row.telegramUsername}`"

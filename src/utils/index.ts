@@ -42,7 +42,7 @@ export const validatePasswordInput = (password: string): string | boolean => {
 };
 
 export const validateRequiredInput = (inputValue: string): boolean | string =>
-  !!inputValue || 'Field is required';
+  !!inputValue || ErrorMessages.REQUIRED_FIELD;
 
 export const getErrorMessage = (error: Error | FirebaseError): string => {
   if (error instanceof FirebaseError) {

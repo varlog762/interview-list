@@ -12,5 +12,6 @@ export enum ErrorMessages {
   INVALID_CREDENTIALS = 'Invalid email or password',
   ACCOUNT_DISABLED = 'This user account has been disabled',
   PERMISSION_DENIED = 'Permission denied',
+  REQUIRED_FIELD = 'This field is required',
   UNKNOWN_ERROR = 'An unknown error occurred',
 }

@@ -2,7 +2,7 @@ export enum RoutePaths {
   ROOT = '/',
   ADD = 'add',
   INTERVIEWS = 'interviews',
-  INTERVIEW = 'interview:id',
+  INTERVIEW = 'interview/:id',
   STATISTICS = 'statistics',
   AUTH = '/auth',
   LOGIN = 'login',
