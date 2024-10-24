@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
-import type { InterviewInputInterface } from 'src/models';
+import type { InterviewInputInterface, InterviewResultType } from 'src/models';
 import { getDocumentById } from 'src/services/firebase';
 import { useUserStore } from 'src/stores/user-store';
 import useQuasarNotify from 'src/composables/useQuasarNotify';
@@ -27,7 +27,7 @@ const whatsAppUsername = ref<string>('');
 const hrPhoneNumber = ref<string>('');
 const minSalary = ref<number>(0);
 const maxSalary = ref<number>(0);
-const result = ref<'offer' | 'reject' | null>(null);
+const result = ref<InterviewResultType>(null);
 
 const isSalaryInvalid = computed<boolean>(() => {
   return minSalary.value > maxSalary.value;
