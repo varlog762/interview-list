@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 import type { InterviewInputInterface, InterviewResultType } from 'src/models';
+import { InterviewStatus } from 'src/enums';
 import { getDocumentById } from 'src/services/firebase';
 import { useUserStore } from 'src/stores/user-store';
 import useQuasarNotify from 'src/composables/useQuasarNotify';
@@ -27,7 +28,7 @@ const whatsAppUsername = ref<string>('');
 const hrPhoneNumber = ref<string>('');
 const minSalary = ref<number>(0);
 const maxSalary = ref<number>(0);
-const result = ref<InterviewResultType>(null);
+const result = ref<InterviewResultType>(InterviewStatus.SCHEDULED);
 
 const isSalaryInvalid = computed<boolean>(() => {
   return minSalary.value > maxSalary.value;
@@ -142,23 +143,42 @@ onMounted(() => loadInterview());
             label="Maximum salary" />
         </div>
 
-        <div class="q-gutter-x-sm ml-8 mt-0">
+        <div class="q-gutter-x-xs ml-8 mt-0">
           <q-radio
             v-model="result"
-            val="reject"
+            :val="InterviewStatus.SCHEDULED"
+            :label="InterviewStatus.SCHEDULED"
             checked-icon="task_alt"
             unchecked-icon="panorama_fish_eye"
-            color="negative">
-            <div class="text-subtitle1">Reject</div>
-          </q-radio>
+            color="primary" />
           <q-radio
             v-model="result"
-            val="offer"
+            :val="InterviewStatus.PENDING"
+            :label="InterviewStatus.PENDING"
             checked-icon="task_alt"
             unchecked-icon="panorama_fish_eye"
-            color="positive"
-            ><div class="text-subtitle1">Offer</div></q-radio
-          >
+            color="info" />
+          <q-radio
+            v-model="result"
+            :val="InterviewStatus.OFFER"
+            :label="InterviewStatus.OFFER"
+            checked-icon="task_alt"
+            unchecked-icon="panorama_fish_eye"
+            color="positive" />
+          <q-radio
+            v-model="result"
+            :val="InterviewStatus.REJECT"
+            :label="InterviewStatus.REJECT"
+            checked-icon="task_alt"
+            unchecked-icon="panorama_fish_eye"
+            color="negative" />
+          <q-radio
+            v-model="result"
+            :val="InterviewStatus.CANCELED"
+            :label="InterviewStatus.CANCELED"
+            checked-icon="task_alt"
+            unchecked-icon="panorama_fish_eye"
+            color="warning" />
         </div>
 
         <q-btn
