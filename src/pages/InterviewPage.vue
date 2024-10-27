@@ -156,6 +156,7 @@ onMounted(() => loadInterview());
         <div class="interview-stage-container">
           <q-input
             class="field"
+            color="info"
             filled
             type="text"
             v-model="interviewStageName"
@@ -163,25 +164,26 @@ onMounted(() => loadInterview());
             lazy-rules
             :rules="[validateRequiredInput]" />
 
-          <div class="q-gutter-sm">
-            <q-badge color="primary"> Model: {{ interviewStageDate }} </q-badge>
+          <div class="q-gutter-sm q-mb-md justify-center flex">
+            <q-badge color="info"> Model: {{ interviewStageDate }} </q-badge>
             <!-- TODO: delete this component -->
-            <q-badge color="purple" text-color="white" class="q-ma-md">
-              Mask: YYYY-MM-DD HH:mm
-            </q-badge>
+            <!-- <q-badge color="purple" text-color="white" class="q-ma-md"> -->
+            <!-- Mask: YYYY-MM-DD HH:mm
+            </q-badge> -->
           </div>
 
           <div class="q-gutter-md row items-start justify-center q-mb-md">
             <q-date
               v-model="interviewStageDate"
               mask="YYYY-MM-DD HH:mm"
-              color="primary" />
+              color="info" />
             <q-time
               v-model="interviewStageDate"
               mask="YYYY-MM-DD HH:mm"
-              color="primary" />
+              color="info" />
           </div>
           <q-input
+            color="info"
             placeholder="Add comment"
             v-model="interviewStageComment"
             filled
