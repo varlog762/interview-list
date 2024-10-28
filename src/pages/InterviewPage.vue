@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { v4 as uuidv4 } from 'uuid';
 
 import type { InterviewInputInterface, InterviewResultType } from 'src/models';
 import { InterviewStatus } from 'src/enums';
@@ -63,6 +64,21 @@ const loadInterview = async (): Promise<void> => {
   } finally {
     isLoading.value = false;
   }
+};
+
+const addStage = (): void => {
+  if (!interview.value) return;
+
+  if (!interview.value.stages) {
+    interview.value.stages = [];
+  }
+
+  interview.value.stages.push({
+    interviewStageId: uuidv4(),
+    interviewStageName: '',
+    interviewStageDate: '',
+    interviewStageComment: '',
+  });
 };
 
 const onSubmit = () => {};
@@ -148,53 +164,59 @@ onMounted(() => loadInterview());
           </div>
 
           <q-btn
+            @click="addStage"
+            class="q-mb-md"
             icon="fa-solid fa-plus"
             label="add stage"
             type="button"
             color="info" />
 
-          <div class="interview-stage-container">
-            <q-input
-              class="field"
-              color="info"
-              filled
-              type="text"
-              v-model="interviewStageName"
-              label="Stage name *"
-              lazy-rules
-              :rules="[validateRequiredInput]" />
+          <template v-if="interview?.stages">
+            <div class="interview-stage-container">
+              <q-input
+                class="field"
+                color="info"
+                filled
+                type="text"
+                v-model="interviewStageName"
+                label="Stage name *"
+                lazy-rules
+                :rules="[validateRequiredInput]" />
 
-            <div class="q-gutter-sm q-mb-md justify-center flex">
-              <q-badge color="info"> Model: {{ interviewStageDate }} </q-badge>
-              <!-- TODO: delete this component -->
-              <!-- <q-badge color="purple" text-color="white" class="q-ma-md"> -->
-              <!-- Mask: YYYY-MM-DD HH:mm
+              <div class="q-gutter-sm q-mb-md justify-center flex">
+                <q-badge color="info">
+                  Model: {{ interviewStageDate }}
+                </q-badge>
+                <!-- TODO: delete this component -->
+                <!-- <q-badge color="purple" text-color="white" class="q-ma-md"> -->
+                <!-- Mask: YYYY-MM-DD HH:mm
             </q-badge> -->
-            </div>
+              </div>
 
-            <div class="q-gutter-md row items-start justify-center q-mb-md">
-              <q-date
-                v-model="interviewStageDate"
-                mask="YYYY-MM-DD HH:mm"
-                color="info" />
-              <q-time
-                v-model="interviewStageDate"
-                mask="YYYY-MM-DD HH:mm"
-                color="info" />
+              <div class="q-gutter-md row items-start justify-center q-mb-md">
+                <q-date
+                  v-model="interviewStageDate"
+                  mask="YYYY-MM-DD HH:mm"
+                  color="info" />
+                <q-time
+                  v-model="interviewStageDate"
+                  mask="YYYY-MM-DD HH:mm"
+                  color="info" />
+              </div>
+              <q-input
+                color="info"
+                placeholder="Add comment"
+                v-model="interviewStageComment"
+                filled
+                type="textarea"
+                class="q-mb-md" />
+              <q-btn
+                icon="fa-solid fa-trash"
+                label="delete stage"
+                type="button"
+                color="negative" />
             </div>
-            <q-input
-              color="info"
-              placeholder="Add comment"
-              v-model="interviewStageComment"
-              filled
-              type="textarea"
-              class="q-mb-md" />
-            <q-btn
-              icon="fa-solid fa-trash"
-              label="delete stage"
-              type="button"
-              color="negative" />
-          </div>
+          </template>
 
           <div class="flex justify-around q-gutter-x-xs ml-8 mt-0">
             <q-radio
