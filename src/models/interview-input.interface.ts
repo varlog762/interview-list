@@ -1,4 +1,4 @@
-import { InterviewResultType } from 'src/models';
+import { InterviewResultType, InterviewStageInterface } from 'src/models';
 
 export interface InterviewInputInterface {
   id: string;
@@ -10,6 +10,7 @@ export interface InterviewInputInterface {
   hrPhoneNumber?: string;
   minSalary?: number;
   maxSalary?: number;
+  stages?: InterviewStageInterface[];
   result?: InterviewResultType;
   createdAt: Date;
 }
