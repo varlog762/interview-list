@@ -43,14 +43,13 @@ const isFormInvalid = computed<boolean>(() => {
   return !(companyName.value && vacancyLink.value && hrName.value);
 });
 
-const loadInterview = async () => {
+const loadInterview = async (): Promise<void> => {
+  isLoading.value = true;
   try {
     if (!interviewId || !userStore.userId) return;
 
-    interview.value = (await getDocumentById(
-      userStore.userId,
-      interviewId
-    )) as InterviewInputInterface;
+    interview.value = await getDocumentById(userStore.userId, interviewId);
+
     if (interview.value) {
       companyName.value = interview.value.companyName;
       vacancyLink.value = interview.value.vacancyLink;
@@ -75,179 +74,183 @@ onMounted(() => loadInterview());
   <spinner-component v-if="isLoading"></spinner-component>
   <!-- page content-->
   <template v-else>
-    <div class="q-pt-xl q-pa-md q-mx-auto max-w-700 q-pb-xl">
-      <h2 class="title-md">Interview to {{ companyName }}</h2>
-      <q-form @submit="onSubmit" class="q-gutter-md">
-        <div class="required-tip">* - required fields</div>
-        <q-input
-          class="first-field field"
-          filled
-          type="text"
-          label="Company name *"
-          v-model="companyName"
-          lazy-rules
-          :rules="[validateRequiredInput]" />
-
-        <q-input
-          class="field"
-          filled
-          type="text"
-          v-model="vacancyLink"
-          label="Job listing link *"
-          lazy-rules
-          :rules="[validateRequiredInput]" />
-
-        <q-input
-          class="field"
-          filled
-          type="text"
-          v-model="hrName"
-          label="HR name *"
-          lazy-rules
-          :rules="[validateRequiredInput]" />
-
-        <q-input
-          class="field"
-          filled
-          type="text"
-          v-model="telegramUsername"
-          label="Telegram username" />
-
-        <q-input
-          class="field"
-          filled
-          type="text"
-          v-model="whatsAppUsername"
-          label="WhatsApp username" />
-
-        <q-input
-          class="field"
-          filled
-          type="text"
-          v-model="hrPhoneNumber"
-          label="Phone number" />
-
-        <div class="flex q-col-gutter-sm ml-8">
+    <template v-if="interview">
+      <div class="q-pt-xl q-pa-md q-mx-auto max-w-700 q-pb-xl">
+        <h2 class="title-md">Interview to {{ companyName }}</h2>
+        <q-form @submit="onSubmit" class="q-gutter-md">
+          <div class="required-tip">* - required fields</div>
           <q-input
-            class="col pt-0"
-            :error="isSalaryInvalid"
-            filled
-            type="number"
-            v-model="minSalary"
-            label="Minimum salary">
-            <template #error>Invalid salary</template>
-          </q-input>
-
-          <q-input
-            class="col pt-0"
-            :error="isSalaryInvalid"
-            filled
-            type="number"
-            v-model="maxSalary"
-            label="Maximum salary" />
-        </div>
-
-        <q-btn
-          icon="fa-solid fa-plus"
-          label="add stage"
-          type="button"
-          color="info" />
-
-        <div class="interview-stage-container">
-          <q-input
-            class="field"
-            color="info"
+            class="first-field field"
             filled
             type="text"
-            v-model="interviewStageName"
-            label="Stage name *"
+            label="Company name *"
+            v-model="companyName"
             lazy-rules
             :rules="[validateRequiredInput]" />
 
-          <div class="q-gutter-sm q-mb-md justify-center flex">
-            <q-badge color="info"> Model: {{ interviewStageDate }} </q-badge>
-            <!-- TODO: delete this component -->
-            <!-- <q-badge color="purple" text-color="white" class="q-ma-md"> -->
-            <!-- Mask: YYYY-MM-DD HH:mm
-            </q-badge> -->
-          </div>
-
-          <div class="q-gutter-md row items-start justify-center q-mb-md">
-            <q-date
-              v-model="interviewStageDate"
-              mask="YYYY-MM-DD HH:mm"
-              color="info" />
-            <q-time
-              v-model="interviewStageDate"
-              mask="YYYY-MM-DD HH:mm"
-              color="info" />
-          </div>
           <q-input
-            color="info"
-            placeholder="Add comment"
-            v-model="interviewStageComment"
+            class="field"
             filled
-            type="textarea"
-            class="q-mb-md" />
+            type="text"
+            v-model="vacancyLink"
+            label="Job listing link *"
+            lazy-rules
+            :rules="[validateRequiredInput]" />
+
+          <q-input
+            class="field"
+            filled
+            type="text"
+            v-model="hrName"
+            label="HR name *"
+            lazy-rules
+            :rules="[validateRequiredInput]" />
+
+          <q-input
+            class="field"
+            filled
+            type="text"
+            v-model="telegramUsername"
+            label="Telegram username" />
+
+          <q-input
+            class="field"
+            filled
+            type="text"
+            v-model="whatsAppUsername"
+            label="WhatsApp username" />
+
+          <q-input
+            class="field"
+            filled
+            type="text"
+            v-model="hrPhoneNumber"
+            label="Phone number" />
+
+          <div class="flex q-col-gutter-sm ml-8">
+            <q-input
+              class="col pt-0"
+              :error="isSalaryInvalid"
+              filled
+              type="number"
+              v-model="minSalary"
+              label="Minimum salary">
+              <template #error>Invalid salary</template>
+            </q-input>
+
+            <q-input
+              class="col pt-0"
+              :error="isSalaryInvalid"
+              filled
+              type="number"
+              v-model="maxSalary"
+              label="Maximum salary" />
+          </div>
+
           <q-btn
-            icon="fa-solid fa-trash"
-            label="delete stage"
+            icon="fa-solid fa-plus"
+            label="add stage"
             type="button"
-            color="negative" />
-        </div>
+            color="info" />
 
-        <div class="flex justify-around q-gutter-x-xs ml-8 mt-0">
-          <q-radio
-            v-model="result"
-            :val="InterviewStatus.SCHEDULED"
-            checked-icon="task_alt"
-            unchecked-icon="panorama_fish_eye"
-            color="primary">
-            <span class="text-body1">{{ InterviewStatus.SCHEDULED }}</span>
-          </q-radio>
-          <q-radio
-            v-model="result"
-            :val="InterviewStatus.PENDING"
-            checked-icon="task_alt"
-            unchecked-icon="panorama_fish_eye"
-            color="info">
-            <span class="text-body1">{{ InterviewStatus.PENDING }}</span>
-          </q-radio>
-          <q-radio
-            v-model="result"
-            :val="InterviewStatus.OFFER"
-            checked-icon="task_alt"
-            unchecked-icon="panorama_fish_eye"
-            color="positive">
-            <span class="text-body1">{{ InterviewStatus.OFFER }}</span>
-          </q-radio>
-          <q-radio
-            v-model="result"
-            :val="InterviewStatus.REJECT"
-            checked-icon="task_alt"
-            unchecked-icon="panorama_fish_eye"
-            color="negative">
-            <span class="text-body1">{{ InterviewStatus.REJECT }}</span>
-          </q-radio>
-          <q-radio
-            v-model="result"
-            :val="InterviewStatus.CANCELED"
-            checked-icon="task_alt"
-            unchecked-icon="panorama_fish_eye"
-            color="warning">
-            <span class="text-body1">{{ InterviewStatus.CANCELED }}</span>
-          </q-radio>
-        </div>
+          <div class="interview-stage-container">
+            <q-input
+              class="field"
+              color="info"
+              filled
+              type="text"
+              v-model="interviewStageName"
+              label="Stage name *"
+              lazy-rules
+              :rules="[validateRequiredInput]" />
 
-        <q-btn
-          icon="fa-regular fa-floppy-disk"
-          label="save interview"
-          type="submit"
-          color="primary"
-          :disable="isFormInvalid"
-          :loading="isLoading" />
-      </q-form>
-    </div>
+            <div class="q-gutter-sm q-mb-md justify-center flex">
+              <q-badge color="info"> Model: {{ interviewStageDate }} </q-badge>
+              <!-- TODO: delete this component -->
+              <!-- <q-badge color="purple" text-color="white" class="q-ma-md"> -->
+              <!-- Mask: YYYY-MM-DD HH:mm
+            </q-badge> -->
+            </div>
+
+            <div class="q-gutter-md row items-start justify-center q-mb-md">
+              <q-date
+                v-model="interviewStageDate"
+                mask="YYYY-MM-DD HH:mm"
+                color="info" />
+              <q-time
+                v-model="interviewStageDate"
+                mask="YYYY-MM-DD HH:mm"
+                color="info" />
+            </div>
+            <q-input
+              color="info"
+              placeholder="Add comment"
+              v-model="interviewStageComment"
+              filled
+              type="textarea"
+              class="q-mb-md" />
+            <q-btn
+              icon="fa-solid fa-trash"
+              label="delete stage"
+              type="button"
+              color="negative" />
+          </div>
+
+          <div class="flex justify-around q-gutter-x-xs ml-8 mt-0">
+            <q-radio
+              v-model="result"
+              :val="InterviewStatus.SCHEDULED"
+              checked-icon="task_alt"
+              unchecked-icon="panorama_fish_eye"
+              color="primary">
+              <span class="text-body1">{{ InterviewStatus.SCHEDULED }}</span>
+            </q-radio>
+            <q-radio
+              v-model="result"
+              :val="InterviewStatus.PENDING"
+              checked-icon="task_alt"
+              unchecked-icon="panorama_fish_eye"
+              color="info">
+              <span class="text-body1">{{ InterviewStatus.PENDING }}</span>
+            </q-radio>
+            <q-radio
+              v-model="result"
+              :val="InterviewStatus.OFFER"
+              checked-icon="task_alt"
+              unchecked-icon="panorama_fish_eye"
+              color="positive">
+              <span class="text-body1">{{ InterviewStatus.OFFER }}</span>
+            </q-radio>
+            <q-radio
+              v-model="result"
+              :val="InterviewStatus.REJECT"
+              checked-icon="task_alt"
+              unchecked-icon="panorama_fish_eye"
+              color="negative">
+              <span class="text-body1">{{ InterviewStatus.REJECT }}</span>
+            </q-radio>
+            <q-radio
+              v-model="result"
+              :val="InterviewStatus.CANCELED"
+              checked-icon="task_alt"
+              unchecked-icon="panorama_fish_eye"
+              color="warning">
+              <span class="text-body1">{{ InterviewStatus.CANCELED }}</span>
+            </q-radio>
+          </div>
+
+          <q-btn
+            icon="fa-regular fa-floppy-disk"
+            label="save interview"
+            type="submit"
+            color="primary"
+            :disable="isFormInvalid"
+            :loading="isLoading" />
+        </q-form>
+      </div>
+    </template>
+    <!-- TODO: add error component -->
+    <template v-else>Oops! Something went wrong...</template>
   </template>
 </template>
 
