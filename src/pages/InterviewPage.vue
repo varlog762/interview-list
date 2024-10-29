@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { v4 as uuidv4 } from 'uuid';
 
 import type { InterviewInputInterface } from 'src/models';
-import { InterviewStatus } from 'src/enums';
-import { getDocumentById } from 'src/services/firebase';
+import { InterviewStatus, RouteNames } from 'src/enums';
+import { getDocumentById, updateInterview } from 'src/services/firebase';
 import { useUserStore } from 'src/stores/user-store';
 import useQuasarNotify from 'src/composables/useQuasarNotify';
 import { validateRequiredInput, toggleDatePicker } from 'src/utils';
@@ -18,6 +18,7 @@ defineOptions({
 const userStore = useUserStore();
 const showToast = useQuasarNotify();
 const route = useRoute();
+const router = useRouter();
 
 const interviewId = route.params.id as string;
 const isLoading = ref<boolean>(true);
@@ -82,8 +83,19 @@ const removeStageById = (stageId: string): void => {
   }
 };
 
-const saveInterview = () => {
+const saveInterview = async () => {
   isLoading.value = true;
+
+  try {
+    if (!interviewId || !userStore.userId || !interview.value) return;
+
+    await updateInterview(userStore.userId, interviewId, interview.value!);
+    router.push({ name: RouteNames.INTERVIEWS });
+  } catch (error) {
+    showToast(error as Error);
+  } finally {
+    isLoading.value = false;
+  }
 };
 
 onMounted(async () => {
