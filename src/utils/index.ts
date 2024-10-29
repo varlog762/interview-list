@@ -2,6 +2,7 @@ import { FirebaseError } from 'firebase/app';
 
 import { ErrorMessages } from 'src/enums';
 import { firebaseErrorMessages } from 'src/constants';
+import { InterviewStageInterface } from 'src/models';
 
 export const validateEmailInput = (email: string): string | boolean => {
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -50,4 +51,8 @@ export const getErrorMessage = (error: Error | FirebaseError): string => {
   }
 
   return ErrorMessages.UNKNOWN_ERROR;
+};
+
+export const toggleDatePicker = (stage: InterviewStageInterface): void => {
+  stage.isDatePickerVisible = !stage.isDatePickerVisible;
 };

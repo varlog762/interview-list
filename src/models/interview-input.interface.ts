@@ -11,6 +11,6 @@ export interface InterviewInputInterface {
   minSalary?: number;
   maxSalary?: number;
   stages?: InterviewStageInterface[];
-  result?: InterviewResultType;
+  status?: InterviewResultType;
   createdAt: Date;
 }

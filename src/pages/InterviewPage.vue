@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { v4 as uuidv4 } from 'uuid';
 
-import type { InterviewInputInterface, InterviewResultType } from 'src/models';
+import type { InterviewInputInterface } from 'src/models';
 import { InterviewStatus } from 'src/enums';
 import { getDocumentById } from 'src/services/firebase';
 import { useUserStore } from 'src/stores/user-store';
@@ -18,30 +18,23 @@ defineOptions({
 const userStore = useUserStore();
 const showToast = useQuasarNotify();
 const route = useRoute();
+
 const interviewId = route.params.id as string;
-
+const isLoading = ref<boolean>(true);
 const interview = ref<InterviewInputInterface | null>(null);
-const companyName = ref<string>('');
-const vacancyLink = ref<string>('');
-const hrName = ref<string>('');
-const telegramUsername = ref<string>('');
-const whatsAppUsername = ref<string>('');
-const hrPhoneNumber = ref<string>('');
-const minSalary = ref<number>(0);
-const maxSalary = ref<number>(0);
-const result = ref<InterviewResultType>(InterviewStatus.SCHEDULED);
 
-const interviewStageName = ref<string>('');
-const interviewStageDate = ref<string | null>(null);
-const interviewStageComment = ref<string>('');
+const reversedStages = computed(() => {
+  if (!interview.value?.stages) return [];
 
-const isSalaryInvalid = computed<boolean>(() => {
-  return minSalary.value > maxSalary.value;
+  return [...interview.value?.stages].reverse();
 });
 
-const isLoading = ref<boolean>(true);
 const isFormInvalid = computed<boolean>(() => {
-  return !(companyName.value && vacancyLink.value && hrName.value);
+  return !(
+    interview.value?.companyName &&
+    interview.value?.vacancyLink &&
+    interview.value?.hrName
+  );
 });
 
 const loadInterview = async (): Promise<void> => {
@@ -50,15 +43,6 @@ const loadInterview = async (): Promise<void> => {
     if (!interviewId || !userStore.userId) return;
 
     interview.value = await getDocumentById(userStore.userId, interviewId);
-
-    if (interview.value) {
-      companyName.value = interview.value.companyName;
-      vacancyLink.value = interview.value.vacancyLink;
-      hrName.value = interview.value.hrName;
-      telegramUsername.value = interview.value.telegramUsername ?? '';
-      whatsAppUsername.value = interview.value.whatsAppUsername ?? '';
-      hrPhoneNumber.value = interview.value.hrPhoneNumber ?? '';
-    }
   } catch (error) {
     showToast(error as Error);
   } finally {
@@ -66,24 +50,59 @@ const loadInterview = async (): Promise<void> => {
   }
 };
 
+const initializeAdditionalFields = (): void => {
+  if (!interview.value) return;
+
+  interview.value.minSalary ??= 0;
+  interview.value.maxSalary ??= 0;
+  interview.value.status ??= InterviewStatus.SCHEDULED;
+};
+
 const addStage = (): void => {
   if (!interview.value) return;
 
-  if (!interview.value.stages) {
-    interview.value.stages = [];
-  }
+  const newStageId = uuidv4();
+
+  interview.value.stages ??= [];
 
   interview.value.stages.push({
-    interviewStageId: uuidv4(),
+    interviewStageId: newStageId,
     interviewStageName: '',
-    interviewStageDate: '',
+    interviewStageDate: 'enter date and time',
     interviewStageComment: '',
+    isDatePickerVisible: false,
   });
 };
 
-const onSubmit = () => {};
+const removeStageById = (stageId: string): void => {
+  if (interview.value?.stages) {
+    interview.value.stages = interview.value.stages.filter(
+      stage => stage.interviewStageId !== stageId
+    );
+  }
+};
 
-onMounted(() => loadInterview());
+const saveInterview = () => {};
+
+onMounted(async () => {
+  await loadInterview();
+  initializeAdditionalFields();
+});
+
+watch(
+  () => interview.value?.minSalary,
+  newMinSalary => {
+    if (!interview.value) return;
+
+    if (
+      newMinSalary != null &&
+      interview.value.maxSalary != null &&
+      newMinSalary > interview.value.maxSalary
+    ) {
+      interview.value.maxSalary = newMinSalary;
+    }
+  }
+);
 </script>
 <template>
   <!-- spinner -->
@@ -92,15 +111,15 @@ onMounted(() => loadInterview());
   <template v-else>
     <template v-if="interview">
       <div class="q-pt-xl q-pa-md q-mx-auto max-w-700 q-pb-xl">
-        <h2 class="title-md">Interview to {{ companyName }}</h2>
-        <q-form @submit="onSubmit" class="q-gutter-md">
+        <h2 class="title-md">Interview to {{ interview.companyName }}</h2>
+        <q-form @submit="saveInterview" class="q-gutter-md">
           <div class="required-tip">* - required fields</div>
           <q-input
             class="first-field field"
             filled
             type="text"
             label="Company name *"
-            v-model="companyName"
+            v-model="interview.companyName"
             lazy-rules
             :rules="[validateRequiredInput]" />
 
@@ -108,7 +127,7 @@ onMounted(() => loadInterview());
             class="field"
             filled
             type="text"
-            v-model="vacancyLink"
+            v-model="interview.vacancyLink"
             label="Job listing link *"
             lazy-rules
             :rules="[validateRequiredInput]" />
@@ -117,7 +136,7 @@ onMounted(() => loadInterview());
             class="field"
             filled
             type="text"
-            v-model="hrName"
+            v-model="interview.hrName"
             label="HR name *"
             lazy-rules
             :rules="[validateRequiredInput]" />
@@ -126,40 +145,39 @@ onMounted(() => loadInterview());
             class="field"
             filled
             type="text"
-            v-model="telegramUsername"
+            v-model="interview.telegramUsername"
             label="Telegram username" />
 
           <q-input
             class="field"
             filled
             type="text"
-            v-model="whatsAppUsername"
+            v-model="interview.whatsAppUsername"
             label="WhatsApp username" />
 
           <q-input
             class="field"
             filled
             type="text"
-            v-model="hrPhoneNumber"
+            v-model="interview.hrPhoneNumber"
             label="Phone number" />
 
           <div class="flex q-col-gutter-sm ml-8">
             <q-input
               class="col pt-0"
-              :error="isSalaryInvalid"
               filled
               type="number"
-              v-model="minSalary"
+              v-model.number="interview.minSalary"
+              :min="0"
               label="Minimum salary">
-              <template #error>Invalid salary</template>
             </q-input>
 
             <q-input
               class="col pt-0"
-              :error="isSalaryInvalid"
               filled
               type="number"
-              v-model="maxSalary"
+              v-model.number="interview.maxSalary"
+              :min="0"
               label="Maximum salary" />
           </div>
 
@@ -172,45 +190,49 @@ onMounted(() => loadInterview());
             color="info" />
 
           <template v-if="interview?.stages">
-            <div class="interview-stage-container">
+            <div
+              class="interview-stage-container"
+              v-for="stage in reversedStages"
+              :key="stage.interviewStageId">
               <q-input
-                class="field"
+                class="q-mb-sm field"
                 color="info"
                 filled
                 type="text"
-                v-model="interviewStageName"
+                v-model="stage.interviewStageName"
                 label="Stage name *"
                 lazy-rules
                 :rules="[validateRequiredInput]" />
 
-              <div class="q-gutter-sm q-mb-md justify-center flex">
-                <q-badge color="info">
-                  Model: {{ interviewStageDate }}
+              <div class="q-gutter-sm q-mb-md">
+                <q-badge color="info" class="text-subtitle1">
+                  Date & time:
+                  {{ stage.interviewStageDate }}
                 </q-badge>
-                <!-- TODO: delete this component -->
-                <!-- <q-badge color="purple" text-color="white" class="q-ma-md"> -->
-                <!-- Mask: YYYY-MM-DD HH:mm
-            </q-badge> -->
               </div>
 
               <div class="q-gutter-md row items-start justify-center q-mb-md">
                 <q-date
-                  v-model="interviewStageDate"
+                  dense
+                  v-model="stage.interviewStageDate"
                   mask="YYYY-MM-DD HH:mm"
                   color="info" />
                 <q-time
-                  v-model="interviewStageDate"
+                  v-model="stage.interviewStageDate"
                   mask="YYYY-MM-DD HH:mm"
                   color="info" />
               </div>
               <q-input
                 color="info"
                 placeholder="Add comment"
-                v-model="interviewStageComment"
+                v-model="stage.interviewStageComment"
+                autogrow
                 filled
+                min-height="5rem"
                 type="textarea"
                 class="q-mb-md" />
               <q-btn
+                @click="removeStageById(stage.interviewStageId)"
                 icon="fa-solid fa-trash"
                 label="delete stage"
                 type="button"
@@ -220,7 +242,7 @@ onMounted(() => loadInterview());
 
           <div class="flex justify-around q-gutter-x-xs ml-8 mt-0">
             <q-radio
-              v-model="result"
+              v-model="interview.status"
               :val="InterviewStatus.SCHEDULED"
               checked-icon="task_alt"
               unchecked-icon="panorama_fish_eye"
@@ -228,7 +250,7 @@ onMounted(() => loadInterview());
               <span class="text-body1">{{ InterviewStatus.SCHEDULED }}</span>
             </q-radio>
             <q-radio
-              v-model="result"
+              v-model="interview.status"
               :val="InterviewStatus.PENDING"
               checked-icon="task_alt"
               unchecked-icon="panorama_fish_eye"
@@ -236,7 +258,7 @@ onMounted(() => loadInterview());
               <span class="text-body1">{{ InterviewStatus.PENDING }}</span>
             </q-radio>
             <q-radio
-              v-model="result"
+              v-model="interview.status"
               :val="InterviewStatus.OFFER"
               checked-icon="task_alt"
               unchecked-icon="panorama_fish_eye"
@@ -244,7 +266,7 @@ onMounted(() => loadInterview());
               <span class="text-body1">{{ InterviewStatus.OFFER }}</span>
             </q-radio>
             <q-radio
-              v-model="result"
+              v-model="interview.status"
               :val="InterviewStatus.REJECT"
               checked-icon="task_alt"
               unchecked-icon="panorama_fish_eye"
@@ -252,7 +274,7 @@ onMounted(() => loadInterview());
               <span class="text-body1">{{ InterviewStatus.REJECT }}</span>
             </q-radio>
             <q-radio
-              v-model="result"
+              v-model="interview.status"
               :val="InterviewStatus.CANCELED"
               checked-icon="task_alt"
               unchecked-icon="panorama_fish_eye"
