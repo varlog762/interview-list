@@ -90,6 +90,17 @@ export const getDocumentById = async (
   return docSnap.data() as InterviewInputInterface;
 };
 
+export const updateInterview = async (
+  userId: string,
+  interviewId: string,
+  interviewInput: InterviewInputInterface
+): Promise<void> => {
+  const docRef = doc(db, `users/${userId}/interviews`, interviewId);
+  await updateDoc(docRef, {
+    ...interviewInput,
+  });
+};
+
 export const deleteInterview = async (
   userId: string,
   interviewId: string

@@ -8,7 +8,7 @@ import { InterviewStatus } from 'src/enums';
 import { getDocumentById } from 'src/services/firebase';
 import { useUserStore } from 'src/stores/user-store';
 import useQuasarNotify from 'src/composables/useQuasarNotify';
-import { validateRequiredInput } from 'src/utils';
+import { validateRequiredInput, toggleDatePicker } from 'src/utils';
 import SpinnerComponent from 'src/components/SpinnerComponent.vue';
 
 defineOptions({
@@ -68,7 +68,7 @@ const addStage = (): void => {
   interview.value.stages.push({
     interviewStageId: newStageId,
     interviewStageName: '',
-    interviewStageDate: 'enter date and time',
+    interviewStageDate: '(Click to select date and time)',
     interviewStageComment: '',
     isDatePickerVisible: false,
   });
@@ -82,7 +82,9 @@ const removeStageById = (stageId: string): void => {
   }
 };
 
-const saveInterview = () => {};
+const saveInterview = () => {
+  isLoading.value = true;
+};
 
 onMounted(async () => {
   await loadInterview();
@@ -204,24 +206,32 @@ watch(
                 lazy-rules
                 :rules="[validateRequiredInput]" />
 
-              <div class="q-gutter-sm q-mb-md">
-                <q-badge color="info" class="text-subtitle1">
+              <div class="q-gutter-sm q-mb-md q-pb-sm">
+                <q-badge
+                  color="info"
+                  class="text-subtitle1 cursor-pointer"
+                  @click="toggleDatePicker(stage)">
                   Date & time:
                   {{ stage.interviewStageDate }}
                 </q-badge>
               </div>
 
-              <div class="q-gutter-md row items-start justify-center q-mb-md">
-                <q-date
-                  dense
-                  v-model="stage.interviewStageDate"
-                  mask="YYYY-MM-DD HH:mm"
-                  color="info" />
-                <q-time
-                  v-model="stage.interviewStageDate"
-                  mask="YYYY-MM-DD HH:mm"
-                  color="info" />
-              </div>
+              <transition>
+                <div
+                  class="q-gutter-md row items-start justify-center q-mb-md"
+                  v-show="stage.isDatePickerVisible">
+                  <q-date
+                    dense
+                    v-model="stage.interviewStageDate"
+                    mask="YYYY-MM-DD HH:mm"
+                    color="info" />
+                  <q-time
+                    v-model="stage.interviewStageDate"
+                    mask="YYYY-MM-DD HH:mm"
+                    color="info" />
+                </div>
+              </transition>
+
               <q-input
                 color="info"
                 placeholder="Add comment"
@@ -312,7 +322,8 @@ watch(
 }
 
 .title-md {
-  margin-bottom: 50px;
+  margin-bottom: 30px;
+  text-align: left;
 }
 
 .required-tip {
@@ -333,5 +344,16 @@ watch(
   padding: 15px;
   border: 2px solid $light-gray;
   border-radius: 5px;
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: all 0.3s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  transform: translateY(30px);
+  opacity: 0;
 }
 </style>
