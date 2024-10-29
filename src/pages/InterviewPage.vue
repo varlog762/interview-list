@@ -204,62 +204,64 @@ watch(
             color="info" />
 
           <template v-if="interview?.stages">
-            <div
-              class="interview-stage-container"
-              v-for="stage in reversedStages"
-              :key="stage.interviewStageId">
-              <q-input
-                class="q-mb-sm field"
-                color="info"
-                filled
-                type="text"
-                v-model="stage.interviewStageName"
-                label="Stage name *"
-                lazy-rules
-                :rules="[validateRequiredInput]" />
-
-              <div class="q-gutter-sm q-mb-md q-pb-sm">
-                <q-badge
+            <TransitionGroup>
+              <div
+                class="interview-stage-container"
+                v-for="stage in reversedStages"
+                :key="stage.interviewStageId">
+                <q-input
+                  class="q-mb-sm field"
                   color="info"
-                  class="text-subtitle1 cursor-pointer"
-                  @click="toggleDatePicker(stage)">
-                  Date & time:
-                  {{ stage.interviewStageDate }}
-                </q-badge>
-              </div>
+                  filled
+                  type="text"
+                  v-model="stage.interviewStageName"
+                  label="Stage name *"
+                  lazy-rules
+                  :rules="[validateRequiredInput]" />
 
-              <transition>
-                <div
-                  class="q-gutter-md row items-start justify-center q-mb-md"
-                  v-show="stage.isDatePickerVisible">
-                  <q-date
-                    dense
-                    v-model="stage.interviewStageDate"
-                    mask="YYYY-MM-DD HH:mm"
-                    color="info" />
-                  <q-time
-                    v-model="stage.interviewStageDate"
-                    mask="YYYY-MM-DD HH:mm"
-                    color="info" />
+                <div class="q-gutter-sm q-mb-md q-pb-sm">
+                  <q-badge
+                    color="info"
+                    class="text-subtitle1 cursor-pointer"
+                    @click="toggleDatePicker(stage)">
+                    Date & time:
+                    {{ stage.interviewStageDate }}
+                  </q-badge>
                 </div>
-              </transition>
 
-              <q-input
-                color="info"
-                placeholder="Add comment"
-                v-model="stage.interviewStageComment"
-                autogrow
-                filled
-                min-height="5rem"
-                type="textarea"
-                class="q-mb-md" />
-              <q-btn
-                @click="removeStageById(stage.interviewStageId)"
-                icon="fa-solid fa-trash"
-                label="delete stage"
-                type="button"
-                color="negative" />
-            </div>
+                <transition>
+                  <div
+                    class="q-gutter-md row items-start justify-center q-mb-md"
+                    v-show="stage.isDatePickerVisible">
+                    <q-date
+                      dense
+                      v-model="stage.interviewStageDate"
+                      mask="YYYY-MM-DD HH:mm"
+                      color="info" />
+                    <q-time
+                      v-model="stage.interviewStageDate"
+                      mask="YYYY-MM-DD HH:mm"
+                      color="info" />
+                  </div>
+                </transition>
+
+                <q-input
+                  color="info"
+                  placeholder="Add comment"
+                  v-model="stage.interviewStageComment"
+                  autogrow
+                  filled
+                  min-height="5rem"
+                  type="textarea"
+                  class="q-mb-md" />
+                <q-btn
+                  @click="removeStageById(stage.interviewStageId)"
+                  icon="fa-solid fa-trash"
+                  label="delete stage"
+                  type="button"
+                  color="negative" />
+              </div>
+            </TransitionGroup>
           </template>
 
           <div class="flex justify-around q-gutter-x-xs ml-8 mt-0">
