@@ -7,7 +7,7 @@ import useQuasarNotify from 'src/composables/useQuasarNotify';
 import { useUserStore } from 'src/stores/user-store';
 import type { InterviewInputInterface } from 'src/models';
 import { createInterview } from 'src/services/firebase';
-import { RouteNames } from 'src/enums';
+import { RouteNames, InterviewStatus } from 'src/enums';
 import { validateRequiredInput } from 'src/utils';
 
 defineOptions({ name: 'AddInterviewPage' });
@@ -36,6 +36,9 @@ const onSubmit = async () => {
     telegramUsername: telegramUsername.value,
     whatsAppUsername: whatsAppUsername.value,
     hrPhoneNumber: hrPhoneNumber.value,
+    minSalary: 0,
+    maxSalary: 0,
+    status: InterviewStatus.SCHEDULED,
     createdAt: new Date(),
   };
 

@@ -44,19 +44,18 @@ const loadInterview = async (): Promise<void> => {
     if (!interviewId || !userStore.userId) return;
 
     interview.value = await getDocumentById(userStore.userId, interviewId);
+
+    if (interview.value.stages && interview.value.stages.length) {
+      interview.value.stages.map(stage => ({
+        ...stage,
+        isDatePickerVisible: false,
+      }));
+    }
   } catch (error) {
     showToast(error as Error);
   } finally {
     isLoading.value = false;
   }
-};
-
-const initializeAdditionalFields = (): void => {
-  if (!interview.value) return;
-
-  interview.value.minSalary ??= 0;
-  interview.value.maxSalary ??= 0;
-  interview.value.status ??= InterviewStatus.SCHEDULED;
 };
 
 const addStage = (): void => {
@@ -89,6 +88,15 @@ const saveInterview = async () => {
   try {
     if (!interviewId || !userStore.userId || !interview.value) return;
 
+    if (interview.value.stages && interview.value.stages.length) {
+      interview.value.stages = interview.value.stages.map(stage => ({
+        interviewStageId: stage.interviewStageId,
+        interviewStageName: stage.interviewStageName,
+        interviewStageDate: stage.interviewStageDate,
+        interviewStageComment: stage.interviewStageComment,
+      }));
+    }
+
     await updateInterview(userStore.userId, interviewId, interview.value!);
     router.push({ name: RouteNames.INTERVIEWS });
   } catch (error) {
@@ -98,9 +106,8 @@ const saveInterview = async () => {
   }
 };
 
-onMounted(async () => {
-  await loadInterview();
-  initializeAdditionalFields();
+onMounted(() => {
+  loadInterview();
 });
 
 watch(
@@ -362,12 +369,12 @@ watch(
 
 .v-enter-active,
 .v-leave-active {
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
 }
 
 .v-enter-from,
 .v-leave-to {
-  transform: translateY(30px);
+  transform: translateY(-30px);
   opacity: 0;
 }
 </style>
