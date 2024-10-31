@@ -5,11 +5,12 @@ import { v4 as uuidv4 } from 'uuid';
 
 import type { InterviewInputInterface } from 'src/models';
 import InterviewStatusComponent from 'src/components/InterviewStatusComponent.vue';
+import InterviewStageComponent from 'src/components/InterviewStageComponent.vue';
 import { RouteNames } from 'src/enums';
 import { getDocumentById, updateInterview } from 'src/services/firebase';
 import { useUserStore } from 'src/stores/user-store';
 import useQuasarNotify from 'src/composables/useQuasarNotify';
-import { validateRequiredInput, toggleDatePicker } from 'src/utils';
+import { validateRequiredInput } from 'src/utils';
 import SpinnerComponent from 'src/components/SpinnerComponent.vue';
 
 defineOptions({
@@ -45,13 +46,6 @@ const loadInterview = async (): Promise<void> => {
     if (!interviewId || !userStore.userId) return;
 
     interview.value = await getDocumentById(userStore.userId, interviewId);
-
-    if (interview.value.stages && interview.value.stages.length) {
-      interview.value.stages.map(stage => ({
-        ...stage,
-        isDatePickerVisible: false,
-      }));
-    }
   } catch (error) {
     showToast(error as Error);
   } finally {
@@ -71,7 +65,6 @@ const addStage = (): void => {
     interviewStageName: '',
     interviewStageDate: '(Click to select date and time)',
     interviewStageComment: '',
-    isDatePickerVisible: false,
   });
 };
 
@@ -88,15 +81,6 @@ const saveInterview = async () => {
 
   try {
     if (!interviewId || !userStore.userId || !interview.value) return;
-
-    if (interview.value.stages && interview.value.stages.length) {
-      interview.value.stages = interview.value.stages.map(stage => ({
-        interviewStageId: stage.interviewStageId,
-        interviewStageName: stage.interviewStageName,
-        interviewStageDate: stage.interviewStageDate,
-        interviewStageComment: stage.interviewStageComment,
-      }));
-    }
 
     await updateInterview(userStore.userId, interviewId, interview.value!);
     router.push({ name: RouteNames.INTERVIEWS });
@@ -213,62 +197,11 @@ watch(
 
           <template v-if="interview?.stages">
             <TransitionGroup>
-              <div
-                class="interview-stage-container"
-                v-for="stage in reversedStages"
-                :key="stage.interviewStageId">
-                <q-input
-                  class="q-mb-sm field"
-                  color="info"
-                  filled
-                  type="text"
-                  v-model="stage.interviewStageName"
-                  label="Stage name *"
-                  lazy-rules
-                  :rules="[validateRequiredInput]" />
-
-                <div class="q-gutter-sm q-mb-md q-pb-sm">
-                  <q-badge
-                    color="info"
-                    class="text-subtitle1 cursor-pointer"
-                    @click="toggleDatePicker(stage)">
-                    Date & time:
-                    {{ stage.interviewStageDate }}
-                  </q-badge>
-                </div>
-
-                <Transition>
-                  <div
-                    class="q-gutter-md row items-start justify-center q-mb-md"
-                    v-show="stage.isDatePickerVisible">
-                    <q-date
-                      dense
-                      v-model="stage.interviewStageDate"
-                      mask="YYYY-MM-DD HH:mm"
-                      color="info" />
-                    <q-time
-                      v-model="stage.interviewStageDate"
-                      mask="YYYY-MM-DD HH:mm"
-                      color="info" />
-                  </div>
-                </Transition>
-
-                <q-input
-                  color="info"
-                  placeholder="Add comment"
-                  v-model="stage.interviewStageComment"
-                  autogrow
-                  filled
-                  min-height="5rem"
-                  type="textarea"
-                  class="q-mb-md" />
-                <q-btn
-                  @click="removeStageById(stage.interviewStageId)"
-                  icon="fa-solid fa-trash"
-                  label="delete stage"
-                  type="button"
-                  color="negative" />
-              </div>
+              <InterviewStageComponent
+                v-for="(stage, index) in reversedStages"
+                :key="stage.interviewStageId"
+                v-model:stage="reversedStages[index]"
+                @remove-stage="removeStageById" />
             </TransitionGroup>
           </template>
 
@@ -321,13 +254,6 @@ watch(
 
 .first-field {
   margin-top: 0px;
-}
-
-.interview-stage-container {
-  margin-bottom: 20px;
-  padding: 15px;
-  border: 2px solid $light-gray;
-  border-radius: 5px;
 }
 
 .v-enter-active,
