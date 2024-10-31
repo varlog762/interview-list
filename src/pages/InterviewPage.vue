@@ -272,10 +272,10 @@ watch(
             </TransitionGroup>
           </template>
 
-          <InterviewStatusComponent
+          <interview-status-component
             v-if="interview.status"
-            :status="interview.status"
-            @update:status="interview.status = $event" />
+            v-model:status="interview.status">
+          </interview-status-component>
 
           <q-btn
             icon="fa-regular fa-floppy-disk"
