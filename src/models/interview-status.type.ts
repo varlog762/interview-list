@@ -1,6 +1,6 @@
 import { InterviewStatus } from 'src/enums';
 
-export type InterviewResultType =
+export type InterviewStatusType =
   | InterviewStatus.OFFER
   | InterviewStatus.REJECT
   | InterviewStatus.SCHEDULED

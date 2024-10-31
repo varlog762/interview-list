@@ -4,7 +4,8 @@ import { useRoute, useRouter } from 'vue-router';
 import { v4 as uuidv4 } from 'uuid';
 
 import type { InterviewInputInterface } from 'src/models';
-import { InterviewStatus, RouteNames } from 'src/enums';
+import InterviewStatusComponent from 'src/components/InterviewStatusComponent.vue';
+import { RouteNames } from 'src/enums';
 import { getDocumentById, updateInterview } from 'src/services/firebase';
 import { useUserStore } from 'src/stores/user-store';
 import useQuasarNotify from 'src/composables/useQuasarNotify';
@@ -236,7 +237,7 @@ watch(
                   </q-badge>
                 </div>
 
-                <transition>
+                <Transition>
                   <div
                     class="q-gutter-md row items-start justify-center q-mb-md"
                     v-show="stage.isDatePickerVisible">
@@ -250,7 +251,7 @@ watch(
                       mask="YYYY-MM-DD HH:mm"
                       color="info" />
                   </div>
-                </transition>
+                </Transition>
 
                 <q-input
                   color="info"
@@ -271,48 +272,10 @@ watch(
             </TransitionGroup>
           </template>
 
-          <div class="flex justify-around q-gutter-x-xs ml-8 mt-0">
-            <q-radio
-              v-model="interview.status"
-              :val="InterviewStatus.SCHEDULED"
-              checked-icon="task_alt"
-              unchecked-icon="panorama_fish_eye"
-              color="primary">
-              <span class="text-body1">{{ InterviewStatus.SCHEDULED }}</span>
-            </q-radio>
-            <q-radio
-              v-model="interview.status"
-              :val="InterviewStatus.PENDING"
-              checked-icon="task_alt"
-              unchecked-icon="panorama_fish_eye"
-              color="info">
-              <span class="text-body1">{{ InterviewStatus.PENDING }}</span>
-            </q-radio>
-            <q-radio
-              v-model="interview.status"
-              :val="InterviewStatus.OFFER"
-              checked-icon="task_alt"
-              unchecked-icon="panorama_fish_eye"
-              color="positive">
-              <span class="text-body1">{{ InterviewStatus.OFFER }}</span>
-            </q-radio>
-            <q-radio
-              v-model="interview.status"
-              :val="InterviewStatus.REJECT"
-              checked-icon="task_alt"
-              unchecked-icon="panorama_fish_eye"
-              color="negative">
-              <span class="text-body1">{{ InterviewStatus.REJECT }}</span>
-            </q-radio>
-            <q-radio
-              v-model="interview.status"
-              :val="InterviewStatus.CANCELED"
-              checked-icon="task_alt"
-              unchecked-icon="panorama_fish_eye"
-              color="warning">
-              <span class="text-body1">{{ InterviewStatus.CANCELED }}</span>
-            </q-radio>
-          </div>
+          <InterviewStatusComponent
+            v-if="interview.status"
+            :status="interview.status"
+            @update:status="interview.status = $event" />
 
           <q-btn
             icon="fa-regular fa-floppy-disk"
