@@ -7,11 +7,11 @@ import type { InterviewInputInterface } from 'src/models';
 import InterviewStatusComponent from 'src/components/InterviewStatusComponent.vue';
 import InterviewStageComponent from 'src/components/InterviewStageComponent.vue';
 import SalaryRangeInputComponent from 'src/components/SalaryRangeInputComponent.vue';
+import CompanyInfoInputComponent from 'src/components/CompanyInfoInputComponent.vue';
 import { RouteNames } from 'src/enums';
 import { getDocumentById, updateInterview } from 'src/services/firebase';
 import { useUserStore } from 'src/stores/user-store';
 import useQuasarNotify from 'src/composables/useQuasarNotify';
-import { validateRequiredInput } from 'src/utils';
 import SpinnerComponent from 'src/components/SpinnerComponent.vue';
 
 defineOptions({
@@ -34,11 +34,17 @@ const reversedStages = computed(() => {
 });
 
 const isFormInvalid = computed<boolean>(() => {
-  return !(
-    interview.value?.companyName &&
-    interview.value?.vacancyLink &&
-    interview.value?.hrName
-  );
+  const {
+    stages = [],
+    companyName,
+    vacancyLink,
+    hrName,
+  } = interview.value || {};
+
+  const hasRequiredFields = companyName && vacancyLink && hrName;
+  const areStagesValid = stages.every(stage => stage.interviewStageName);
+
+  return !hasRequiredFields || (stages.length > 0 && !areStagesValid);
 });
 
 const loadInterview = async (): Promise<void> => {
@@ -98,66 +104,18 @@ onMounted(() => {
 </script>
 <template>
   <!-- spinner -->
-  <spinner-component v-if="isLoading"></spinner-component>
+  <SpinnerComponent v-if="isLoading" />
   <!-- page content-->
   <template v-else>
     <template v-if="interview">
       <div class="q-pt-xl q-pa-md q-mx-auto max-w-700 q-pb-xl">
         <h2 class="title-md">Interview to {{ interview.companyName }}</h2>
         <q-form @submit="saveInterview" class="q-gutter-md">
-          <div class="required-tip">* - required fields</div>
-          <q-input
-            class="first-field field"
-            filled
-            type="text"
-            label="Company name *"
-            v-model="interview.companyName"
-            lazy-rules
-            :rules="[validateRequiredInput]" />
+          <CompanyInfoInputComponent v-model:company-info="interview" />
 
-          <q-input
-            class="field"
-            filled
-            type="text"
-            v-model="interview.vacancyLink"
-            label="Job listing link *"
-            lazy-rules
-            :rules="[validateRequiredInput]" />
-
-          <q-input
-            class="field"
-            filled
-            type="text"
-            v-model="interview.hrName"
-            label="HR name *"
-            lazy-rules
-            :rules="[validateRequiredInput]" />
-
-          <q-input
-            class="field"
-            filled
-            type="text"
-            v-model="interview.telegramUsername"
-            label="Telegram username" />
-
-          <q-input
-            class="field"
-            filled
-            type="text"
-            v-model="interview.whatsAppUsername"
-            label="WhatsApp username" />
-
-          <q-input
-            class="field"
-            filled
-            type="text"
-            v-model="interview.hrPhoneNumber"
-            label="Phone number" />
-
-          <salary-range-input-component
+          <SalaryRangeInputComponent
             v-model:min-salary="interview.minSalary"
-            v-model:maxSalary="interview.maxSalary">
-          </salary-range-input-component>
+            v-model:maxSalary="interview.maxSalary" />
 
           <q-btn
             @click="addStage"
@@ -177,10 +135,9 @@ onMounted(() => {
             </TransitionGroup>
           </template>
 
-          <interview-status-component
+          <InterviewStatusComponent
             v-if="interview.status"
-            v-model:status="interview.status">
-          </interview-status-component>
+            v-model:status="interview.status" />
 
           <q-btn
             icon="fa-regular fa-floppy-disk"
@@ -201,19 +158,6 @@ onMounted(() => {
 .title-md {
   margin-bottom: 30px;
   text-align: left;
-}
-
-.required-tip {
-  color: $gray;
-  letter-spacing: 0.1em;
-}
-
-.field {
-  padding-bottom: 20px;
-}
-
-.first-field {
-  margin-top: 0px;
 }
 
 .v-enter-active,
