@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { v4 as uuidv4 } from 'uuid';
 
 import type { InterviewInputInterface } from 'src/models';
 import InterviewStatusComponent from 'src/components/InterviewStatusComponent.vue';
 import InterviewStageComponent from 'src/components/InterviewStageComponent.vue';
+import SalaryRangeInputComponent from 'src/components/SalaryRangeInputComponent.vue';
 import { RouteNames } from 'src/enums';
 import { getDocumentById, updateInterview } from 'src/services/firebase';
 import { useUserStore } from 'src/stores/user-store';
@@ -94,21 +95,6 @@ const saveInterview = async () => {
 onMounted(() => {
   loadInterview();
 });
-
-watch(
-  () => interview.value?.minSalary,
-  newMinSalary => {
-    if (!interview.value) return;
-
-    if (
-      newMinSalary != null &&
-      interview.value.maxSalary != null &&
-      newMinSalary > interview.value.maxSalary
-    ) {
-      interview.value.maxSalary = newMinSalary;
-    }
-  }
-);
 </script>
 <template>
   <!-- spinner -->
@@ -168,24 +154,10 @@ watch(
             v-model="interview.hrPhoneNumber"
             label="Phone number" />
 
-          <div class="flex q-col-gutter-sm ml-8">
-            <q-input
-              class="col pt-0"
-              filled
-              type="number"
-              v-model.number="interview.minSalary"
-              :min="0"
-              label="Minimum salary">
-            </q-input>
-
-            <q-input
-              class="col pt-0"
-              filled
-              type="number"
-              v-model.number="interview.maxSalary"
-              :min="0"
-              label="Maximum salary" />
-          </div>
+          <salary-range-input-component
+            v-model:min-salary="interview.minSalary"
+            v-model:maxSalary="interview.maxSalary">
+          </salary-range-input-component>
 
           <q-btn
             @click="addStage"
@@ -226,18 +198,6 @@ watch(
 </template>
 
 <style lang="scss" scoped>
-.ml-8 {
-  margin-left: 8px;
-}
-
-.mt-0 {
-  margin-top: 0;
-}
-
-.pt-0 {
-  padding-top: 0;
-}
-
 .title-md {
   margin-bottom: 30px;
   text-align: left;
