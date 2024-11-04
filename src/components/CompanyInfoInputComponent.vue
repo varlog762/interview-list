@@ -11,7 +11,7 @@ const companyInfo = defineModel<InterviewInputInterface>('companyInfo');
 
 <template>
   <div class="required-tip">* - required fields</div>
-  <div>
+  <div class="q-gutter-y-sm q-mt-sm">
     <q-input
       class="first-field field"
       filled

@@ -19,7 +19,7 @@ watch(minSalary, newMinSalary => {
 </script>
 
 <template>
-  <div class="flex q-col-gutter-sm ml-8">
+  <div class="flex q-col-gutter-sm ml-8 mt-8 q-my-sm">
     <q-input
       class="col pt-0"
       filled

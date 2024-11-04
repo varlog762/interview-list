@@ -119,7 +119,7 @@ onMounted(() => {
 
           <q-btn
             @click="addStage"
-            class="q-mb-md"
+            class="q-mb-sm"
             icon="fa-solid fa-plus"
             label="add stage"
             type="button"
@@ -156,7 +156,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .title-md {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   text-align: left;
 }
 
