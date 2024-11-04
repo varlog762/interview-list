@@ -1,6 +1,4 @@
 <script setup lang="ts">
-// import { ref } from 'vue';
-
 import type { InterviewStageInterface } from 'src/models';
 
 defineOptions({
@@ -10,11 +8,6 @@ defineOptions({
 const stage = defineModel<InterviewStageInterface>('stage');
 
 defineEmits<{ 'remove-stage': [stageId: string] }>();
-
-// let isDatePickerVisible = ref<boolean>(false);
-// const toggleDatePicker = (): void => {
-//   isDatePickerVisible.value = !isDatePickerVisible.value;
-// };
 </script>
 
 <template>

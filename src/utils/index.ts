@@ -1,7 +1,7 @@
 import { FirebaseError } from 'firebase/app';
 import { v4 as uuidv4 } from 'uuid';
 
-import { ErrorMessages } from 'src/enums';
+import { ErrorMessages, InterviewStatus } from 'src/enums';
 import { firebaseErrorMessages } from 'src/constants';
 
 export const validateEmailInput = (email: string): string | boolean => {
@@ -62,4 +62,29 @@ export const createNewStage = () => {
     interviewStageDate: '',
     interviewStageComment: '',
   };
+};
+
+export const displaySalary = (minSalary: number, maxSalary: number): string => {
+  if (!minSalary && !maxSalary) return '-';
+  if (!minSalary) return `${maxSalary}`;
+  if (minSalary === maxSalary) return `${minSalary}`;
+
+  return `${minSalary} - ${maxSalary}`;
+};
+
+export const getStatusBadgeColor = (status: string): string => {
+  switch (status) {
+    case InterviewStatus.OFFER:
+      return 'positive';
+    case InterviewStatus.REJECT:
+      return 'negative';
+    case InterviewStatus.SCHEDULED:
+      return 'primary';
+    case InterviewStatus.CANCELED:
+      return 'warning';
+    case InterviewStatus.PENDING:
+      return 'info';
+    default:
+      return 'info';
+  }
 };

@@ -5,12 +5,14 @@ import type {
   InterviewInputInterface,
   TableColumnsInterface,
 } from 'src/models';
+import SpinnerComponent from 'src/components/SpinnerComponent.vue';
+import ConfirmationPopupComponent from 'src/components/ConfirmationPopupComponent.vue';
+import StageTooltipComponent from 'src/components/StageTooltipComponent.vue';
 import { useUserStore } from 'src/stores/user-store';
 import useQuasarNotify from 'src/composables/useQuasarNotify';
 import { getAllInterviews, deleteInterview } from 'src/services/firebase';
-import SpinnerComponent from 'src/components/SpinnerComponent.vue';
-import ConfirmationPopupComponent from 'src/components/ConfirmationPopupComponent.vue';
 import { RouteNames } from 'src/enums';
+import { displaySalary, getStatusBadgeColor } from 'src/utils';
 
 defineOptions({
   name: 'InterviewListPage',
@@ -43,6 +45,24 @@ const columns: TableColumnsInterface[] = [
     label: 'Contacts',
     field: 'contacts',
     align: 'left',
+  },
+  {
+    name: 'stages',
+    label: 'Stages',
+    align: 'left',
+    field: 'stages',
+  },
+  {
+    name: 'salaryRange',
+    label: 'Salary range',
+    align: 'center',
+    field: 'salaryRange',
+  },
+  {
+    name: 'status',
+    label: 'Status',
+    align: 'left',
+    field: 'status',
   },
   {
     name: 'controls',
@@ -148,12 +168,18 @@ onMounted(() => {
                       size="sm"
                       name="fa-brands fa-telegram"
                       color="primary" />
+                    <q-tooltip class="bg-secondary text-body2">
+                      {{ props.row.telegramUsername }}
+                    </q-tooltip>
                   </a>
                   <a
                     v-if="props.row.whatsAppUsername"
                     :href="`https://wa.me/${props.row.whatsAppUsername}`"
                     target="_blank">
                     <q-icon size="sm" name="fab fa-whatsapp" color="positive" />
+                    <q-tooltip class="bg-secondary text-body2">
+                      {{ props.row.whatsAppUsername }}
+                    </q-tooltip>
                   </a>
                   <a
                     v-if="props.row.hrPhoneNumber"
@@ -163,8 +189,46 @@ onMounted(() => {
                       size="sm"
                       name="fa-solid fa-phone"
                       color="secondary" />
+                    <q-tooltip class="bg-secondary text-body2">
+                      {{ props.row.hrPhoneNumber }}
+                    </q-tooltip>
                   </a>
                 </div>
+              </q-td>
+            </template>
+
+            <template #body-cell-stages="props">
+              <q-td :props="props">
+                <div class="flex justify-start q-gutter-xs">
+                  <q-badge
+                    rounded
+                    color="primary"
+                    class="text-body2 q-px-sm"
+                    v-for="(stage, index) in props.row.stages"
+                    :key="index">
+                    {{ index + 1 }}
+                    <q-tooltip>
+                      <StageTooltipComponent :stage="stage" />
+                    </q-tooltip>
+                  </q-badge>
+                </div>
+              </q-td>
+            </template>
+
+            <template #body-cell-salaryRange="props">
+              <q-td :props="props">
+                {{ displaySalary(props.row.minSalary, props.row.maxSalary) }}
+              </q-td>
+            </template>
+
+            <template #body-cell-status="props">
+              <q-td :props="props">
+                <q-badge
+                  rounded
+                  class="text-body2 q-px-sm"
+                  :color="getStatusBadgeColor(props.row.status)">
+                  {{ props.row.status }}
+                </q-badge>
               </q-td>
             </template>
 
