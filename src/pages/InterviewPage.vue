@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { v4 as uuidv4 } from 'uuid';
 
 import type { InterviewInputInterface } from 'src/models';
 import InterviewStatusComponent from 'src/components/InterviewStatusComponent.vue';
@@ -13,6 +12,7 @@ import { getDocumentById, updateInterview } from 'src/services/firebase';
 import { useUserStore } from 'src/stores/user-store';
 import useQuasarNotify from 'src/composables/useQuasarNotify';
 import SpinnerComponent from 'src/components/SpinnerComponent.vue';
+import { createNewStage } from 'src/utils';
 
 defineOptions({
   name: 'InterviewPage',
@@ -63,24 +63,17 @@ const loadInterview = async (): Promise<void> => {
 const addStage = (): void => {
   if (!interview.value) return;
 
-  const newStageId = uuidv4();
-
   interview.value.stages ??= [];
-
-  interview.value.stages.push({
-    interviewStageId: newStageId,
-    interviewStageName: '',
-    interviewStageDate: '(Click to select date and time)',
-    interviewStageComment: '',
-  });
+  const newStage = createNewStage();
+  interview.value.stages.push(newStage);
 };
 
 const removeStageById = (stageId: string): void => {
-  if (interview.value?.stages) {
-    interview.value.stages = interview.value.stages.filter(
-      stage => stage.interviewStageId !== stageId
-    );
-  }
+  if (!interview.value?.stages?.length) return;
+
+  interview.value.stages = interview.value.stages.filter(
+    stage => stage.interviewStageId !== stageId
+  );
 };
 
 const saveInterview = async () => {
@@ -119,7 +112,7 @@ onMounted(() => {
 
           <q-btn
             @click="addStage"
-            class="q-mb-sm"
+            class="q-mb-md"
             icon="fa-solid fa-plus"
             label="add stage"
             type="button"
@@ -158,16 +151,5 @@ onMounted(() => {
 .title-md {
   margin-bottom: 20px;
   text-align: left;
-}
-
-.v-enter-active,
-.v-leave-active {
-  transition: all 0.4s ease;
-}
-
-.v-enter-from,
-.v-leave-to {
-  transform: translateY(-30px);
-  opacity: 0;
 }
 </style>

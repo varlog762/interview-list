@@ -1,4 +1,5 @@
 import { FirebaseError } from 'firebase/app';
+import { v4 as uuidv4 } from 'uuid';
 
 import { ErrorMessages } from 'src/enums';
 import { firebaseErrorMessages } from 'src/constants';
@@ -50,4 +51,15 @@ export const getErrorMessage = (error: Error | FirebaseError): string => {
   }
 
   return ErrorMessages.UNKNOWN_ERROR;
+};
+
+export const createNewStage = () => {
+  const newStageId = uuidv4();
+
+  return {
+    interviewStageId: newStageId,
+    interviewStageName: '',
+    interviewStageDate: '',
+    interviewStageComment: '',
+  };
 };

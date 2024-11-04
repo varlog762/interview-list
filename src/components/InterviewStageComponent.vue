@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+// import { ref } from 'vue';
 
 import type { InterviewStageInterface } from 'src/models';
 
@@ -11,57 +11,75 @@ const stage = defineModel<InterviewStageInterface>('stage');
 
 defineEmits<{ 'remove-stage': [stageId: string] }>();
 
-let isDatePickerVisible = ref<boolean>(false);
-const toggleDatePicker = (): void => {
-  isDatePickerVisible.value = !isDatePickerVisible.value;
-};
+// let isDatePickerVisible = ref<boolean>(false);
+// const toggleDatePicker = (): void => {
+//   isDatePickerVisible.value = !isDatePickerVisible.value;
+// };
 </script>
 
 <template>
   <div class="interview-stage-container">
     <q-input
       v-model="stage!.interviewStageName"
-      class="q-mb-sm field"
+      class="field q-mb-md"
       color="info"
       filled
       type="text"
       label="Stage name *" />
 
-    <div class="q-gutter-sm q-mb-md q-pb-sm">
-      <q-badge
-        color="info"
-        class="text-subtitle1 cursor-pointer"
-        @click="toggleDatePicker()">
-        Date & time:
-        {{ stage!.interviewStageDate }}
-      </q-badge>
-    </div>
+    <div class="q-mb-md" style="max-width: 300px">
+      <q-input
+        filled
+        v-model="stage!.interviewStageDate"
+        label="Date & time"
+        readonly>
+        <template v-slot:prepend>
+          <q-icon name="event" class="cursor-pointer">
+            <q-popup-proxy
+              cover
+              transition-show="scale"
+              transition-hide="scale">
+              <q-date
+                v-model="stage!.interviewStageDate"
+                mask="YYYY-MM-DD HH:mm">
+                <div class="row items-center justify-end">
+                  <q-btn v-close-popup label="Close" color="primary" flat />
+                </div>
+              </q-date>
+            </q-popup-proxy>
+          </q-icon>
+        </template>
 
-    <Transition>
-      <div
-        class="q-gutter-md row items-start justify-center q-mb-md"
-        v-show="isDatePickerVisible">
-        <q-date
-          dense
-          v-model="stage!.interviewStageDate"
-          mask="YYYY-MM-DD HH:mm"
-          color="info" />
-        <q-time
-          v-model="stage!.interviewStageDate"
-          mask="YYYY-MM-DD HH:mm"
-          color="info" />
-      </div>
-    </Transition>
+        <template v-slot:append>
+          <q-icon name="access_time" class="cursor-pointer">
+            <q-popup-proxy
+              cover
+              transition-show="scale"
+              transition-hide="scale">
+              <q-time
+                v-model="stage!.interviewStageDate"
+                mask="YYYY-MM-DD HH:mm"
+                format24h>
+                <div class="row items-center justify-end">
+                  <q-btn v-close-popup label="Close" color="primary" flat />
+                </div>
+              </q-time>
+            </q-popup-proxy>
+          </q-icon>
+        </template>
+      </q-input>
+    </div>
 
     <q-input
       color="info"
-      placeholder="Add comment"
+      label="Add comment"
       v-model="stage!.interviewStageComment"
       autogrow
       filled
       min-height="5rem"
       type="textarea"
       class="q-mb-md" />
+
     <q-btn
       @click="$emit('remove-stage', stage!.interviewStageId)"
       icon="fa-solid fa-trash"
@@ -73,6 +91,7 @@ const toggleDatePicker = (): void => {
 
 <style lang="scss" scoped>
 .interview-stage-container {
+  margin-top: 8px;
   margin-bottom: 20px;
   padding: 15px;
   border: 2px solid $light-gray;
