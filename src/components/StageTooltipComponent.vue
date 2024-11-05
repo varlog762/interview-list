@@ -21,7 +21,7 @@ const props = defineProps<{ stage: InterviewStageInterface }>();
       </q-card-section>
       <div v-if="stage.interviewStageComment">
         <q-separator dark />
-        <q-card-section class="text-body2 mw-100">
+        <q-card-section class="text-body2 mw-250">
           {{ props.stage.interviewStageComment }}
         </q-card-section>
       </div>
@@ -30,7 +30,7 @@ const props = defineProps<{ stage: InterviewStageInterface }>();
 </template>
 
 <style lang="scss" scoped>
-.mw-100 {
+.mw-250 {
   max-width: 250px;
 }
 </style>
