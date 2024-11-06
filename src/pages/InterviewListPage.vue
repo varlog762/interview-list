@@ -119,7 +119,13 @@ onMounted(() => {
       <div class="q-pa-md q-pt-xl">
         <h2 class="title-md">Your interviews</h2>
         <div class="q-pa-md">
-          <q-table :rows="interviewList" :columns="columns" row-key="name">
+          <q-table
+            style="max-height: 80vh"
+            :rows="interviewList"
+            :columns="columns"
+            row-key="name"
+            virtual-scroll
+            :rows-per-page-options="[0]">
             <template #body-cell-companyName="props">
               <q-td :props="props">
                 <span class="text-body2">{{ props.row.companyName }}</span>
