@@ -21,7 +21,7 @@ defineOptions({
 const userStore = useUserStore();
 const showToast = useQuasarNotify();
 
-const interviews = ref<InterviewInputInterface[]>([]);
+const interviewList = ref<InterviewInputInterface[]>([]);
 const interviewIdToDelete = ref<string | null>(null);
 const isLoading = ref<boolean>(true);
 const isPopupVisible = ref<boolean>(false);
@@ -73,7 +73,7 @@ const columns: TableColumnsInterface[] = [
 
 const loadInterviews = async () => {
   try {
-    interviews.value = await getAllInterviews(userStore.userId as string);
+    interviewList.value = await getAllInterviews(userStore.userId as string);
   } catch (error) {
     showToast(error as Error);
   } finally {
@@ -115,11 +115,11 @@ onMounted(() => {
 <template>
   <spinner-component v-if="isLoading"></spinner-component>
   <template v-else>
-    <template v-if="interviews.length">
+    <template v-if="interviewList.length">
       <div class="q-pa-md q-pt-xl">
         <h2 class="title-md">Your interviews</h2>
         <div class="q-pa-md">
-          <q-table :rows="interviews" :columns="columns" row-key="name">
+          <q-table :rows="interviewList" :columns="columns" row-key="name">
             <template #body-cell-companyName="props">
               <q-td :props="props">
                 <span class="text-body2">{{ props.row.companyName }}</span>

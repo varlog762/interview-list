@@ -1,23 +1,32 @@
-const PRIMARY_COLOR = '#FFA500';
-const SECONDARY_COLOR = '#FFD700';
-const ACCENT_COLOR = '#FF6347';
-const DARK_COLOR = '#000000';
-const DARK_PAGE_COLOR = '#1d1d1d';
-const LIGHT_COLOR = '#e0e0e0';
-const POSITIVE_COLOR = '#25d366';
-const NEGATIVE_COLOR = '#f54336';
-const INFO_COLOR = '#31ccec';
-const WARNING_COLOR = '#ffe680';
-
-export {
-  PRIMARY_COLOR,
-  SECONDARY_COLOR,
-  ACCENT_COLOR,
-  DARK_COLOR,
-  DARK_PAGE_COLOR,
-  LIGHT_COLOR,
-  POSITIVE_COLOR,
-  NEGATIVE_COLOR,
-  INFO_COLOR,
-  WARNING_COLOR,
+export const brandColors = {
+  PRIMARY: getComputedStyle(document.documentElement)
+    .getPropertyValue('--q-primary')
+    .trim(),
+  SECONDARY: getComputedStyle(document.documentElement)
+    .getPropertyValue('--q-secondary')
+    .trim(),
+  ACCENT: getComputedStyle(document.documentElement)
+    .getPropertyValue('--q-accent')
+    .trim(),
+  DARK: getComputedStyle(document.documentElement)
+    .getPropertyValue('--q-dark')
+    .trim(),
+  DARK_PAGE: getComputedStyle(document.documentElement)
+    .getPropertyValue('--q-dark-page')
+    .trim(),
+  LIGHT: getComputedStyle(document.documentElement)
+    .getPropertyValue('--q-light')
+    .trim(),
+  POSITIVE: getComputedStyle(document.documentElement)
+    .getPropertyValue('--q-positive')
+    .trim(),
+  NEGATIVE: getComputedStyle(document.documentElement)
+    .getPropertyValue('--q-negative')
+    .trim(),
+  INFO: getComputedStyle(document.documentElement)
+    .getPropertyValue('--q-info')
+    .trim(),
+  WARNING: getComputedStyle(document.documentElement)
+    .getPropertyValue('--q-warning')
+    .trim(),
 };
