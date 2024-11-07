@@ -14,9 +14,11 @@
     </q-header>
 
     <q-page-container>
-      <q-page>
-        <router-view />
-      </q-page>
+      <div class="container">
+        <q-page>
+          <router-view />
+        </q-page>
+      </div>
     </q-page-container>
   </q-layout>
 </template>

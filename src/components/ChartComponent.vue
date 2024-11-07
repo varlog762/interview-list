@@ -55,7 +55,7 @@ const chartOptions = {
   responsive: true,
   plugins: {
     legend: { position: 'top' as const },
-    title: { display: true, text: 'Распределение по статусам' },
+    title: { display: true, text: '' },
   },
 };
 
@@ -90,6 +90,6 @@ onMounted(() => {
 }
 .chart-max-width {
   margin: 0 auto;
-  max-width: 50%;
+  max-width: 50vw;
 }
 </style>

@@ -1,6 +1,10 @@
 import { FirebaseError } from 'firebase/app';
 import { v4 as uuidv4 } from 'uuid';
 
+import type {
+  InterviewInputInterface,
+  InterviewStageInterface,
+} from 'src/models';
 import { ErrorMessages, InterviewStatus } from 'src/enums';
 import { firebaseErrorMessages } from 'src/constants';
 
@@ -53,7 +57,25 @@ export const getErrorMessage = (error: Error | FirebaseError): string => {
   return ErrorMessages.UNKNOWN_ERROR;
 };
 
-export const createNewStage = () => {
+export const createNewInterview = (): InterviewInputInterface => {
+  const newInterviewId = uuidv4();
+
+  return {
+    id: newInterviewId,
+    companyName: '',
+    vacancyLink: '',
+    hrName: '',
+    telegramUsername: '',
+    whatsAppUsername: '',
+    hrPhoneNumber: '',
+    minSalary: 0,
+    maxSalary: 0,
+    status: InterviewStatus.SCHEDULED,
+    createdAt: new Date(),
+  };
+};
+
+export const createNewStage = (): InterviewStageInterface => {
   const newStageId = uuidv4();
 
   return {
