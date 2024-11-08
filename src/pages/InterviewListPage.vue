@@ -5,7 +5,7 @@ import type { InterviewInputInterface } from 'src/models';
 import SpinnerComponent from 'src/components/SpinnerComponent.vue';
 import InterviewTableComponent from 'src/components/InterviewTableComponent.vue';
 import ConfirmationPopupComponent from 'src/components/ConfirmationPopupComponent.vue';
-
+import NoInterviewComponent from 'src/components/NoInterviewComponent.vue';
 import { useUserStore } from 'src/stores/user-store';
 import useQuasarNotify from 'src/composables/useQuasarNotify';
 import { getAllInterviews, deleteInterview } from 'src/services/firebase';
@@ -46,9 +46,9 @@ const confirmDeletion = async () => {
   isLoading.value = true;
 
   try {
-    if (interviewIdToDelete.value && userStore.userId) {
-      await deleteInterview(userStore.userId, interviewIdToDelete.value);
-    }
+    if (!interviewIdToDelete.value || !userStore.userId) return;
+
+    await deleteInterview(userStore.userId, interviewIdToDelete.value);
     loadInterviews();
   } catch (error) {
     showToast(error as Error);
@@ -75,7 +75,9 @@ onMounted(() => {
       </div>
     </template>
     <!-- TODO: implement this component-->
-    <template v-else>THERE ARE NO INTERVIEWS</template>
+    <template v-else>
+      <NoInterviewComponent />
+    </template>
 
     <!-- Delete confirmation popup -->
     <confirmation-popup-component
