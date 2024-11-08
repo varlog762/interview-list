@@ -16,7 +16,6 @@ const validateForm = (): void => {
   isFormValid.value = isEmailValid && isPasswordValid;
 };
 
-watch([email, password], validateForm);
 const onSubmit = async () => {
   const authInput = {
     email: email.value,
@@ -25,6 +24,8 @@ const onSubmit = async () => {
 
   userStore.signIn(authInput);
 };
+
+watch([email, password], validateForm);
 </script>
 
 <template>
