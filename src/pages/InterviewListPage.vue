@@ -5,6 +5,7 @@ import type { InterviewInputInterface } from 'src/models';
 import SpinnerComponent from 'src/components/SpinnerComponent.vue';
 import InterviewTableComponent from 'src/components/InterviewTableComponent.vue';
 import ConfirmationPopupComponent from 'src/components/ConfirmationPopupComponent.vue';
+import InterviewFilterComponent from 'src/components/InterviewFilterComponent.vue';
 import NoInterviewComponent from 'src/components/NoInterviewComponent.vue';
 import { useUserStore } from 'src/stores/user-store';
 import useQuasarNotify from 'src/composables/useQuasarNotify';
@@ -18,6 +19,7 @@ const userStore = useUserStore();
 const showToast = useQuasarNotify();
 
 const interviewList = ref<InterviewInputInterface[]>([]);
+const filteredInterviewList = ref<InterviewInputInterface[]>([]);
 const interviewIdToDelete = ref<string | null>(null);
 const isLoading = ref<boolean>(true);
 const isPopupVisible = ref<boolean>(false);
@@ -25,6 +27,7 @@ const isPopupVisible = ref<boolean>(false);
 const loadInterviews = async () => {
   try {
     interviewList.value = await getAllInterviews(userStore.userId as string);
+    filteredInterviewList.value = [...interviewList.value];
   } catch (error) {
     showToast(error as Error);
   } finally {
@@ -58,6 +61,12 @@ const confirmDeletion = async () => {
   }
 };
 
+const updateFilteredInterviews = (
+  filterInterviews: InterviewInputInterface[]
+): void => {
+  filteredInterviewList.value = filterInterviews;
+};
+
 onMounted(() => {
   loadInterviews();
 });
@@ -68,13 +77,16 @@ onMounted(() => {
   <template v-else>
     <template v-if="interviewList.length">
       <div class="q-pa-md q-pt-xl">
-        <h2 class="title-md">Your interviews</h2>
-        <InterviewTableComponent
+        <h2 class="title-md q-mb-md">Your interviews</h2>
+        <InterviewFilterComponent
           :interviewList="interviewList"
+          @filtered-interviews="updateFilteredInterviews" />
+        <InterviewTableComponent
+          :interviewList="filteredInterviewList"
           @delete-interview="showInterviewDeletionPopup" />
       </div>
     </template>
-    <!-- TODO: implement this component-->
+
     <template v-else>
       <NoInterviewComponent />
     </template>
