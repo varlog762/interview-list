@@ -6,7 +6,7 @@ import type {
   InterviewStageInterface,
 } from 'src/models';
 import { ErrorMessagesEnum, InterviewStatusEnum } from 'src/enums';
-import { firebaseErrorMessages, brandColors } from 'src/constants';
+import { firebaseErrorMessages } from 'src/constants';
 
 export const validateEmailInput = (email: string): string | boolean => {
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -97,16 +97,16 @@ export const displaySalary = (minSalary: number, maxSalary: number): string => {
 export const getStatusBadgeColor = (status: string): string => {
   switch (status) {
     case InterviewStatusEnum.OFFER:
-      return brandColors.POSITIVE;
+      return 'positive';
     case InterviewStatusEnum.REJECT:
-      return brandColors.NEGATIVE;
+      return 'negative';
     case InterviewStatusEnum.SCHEDULED:
-      return brandColors.PRIMARY;
+      return 'primary';
     case InterviewStatusEnum.CANCELED:
-      return brandColors.WARNING;
+      return 'warning';
     case InterviewStatusEnum.PENDING:
-      return brandColors.INFO;
+      return 'info';
     default:
-      return brandColors.INFO;
+      return 'info';
   }
 };
