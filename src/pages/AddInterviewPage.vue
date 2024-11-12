@@ -8,7 +8,7 @@ import CompanyInfoInputComponent from 'src/components/CompanyInfoInputComponent.
 import useQuasarNotify from 'src/composables/useQuasarNotify';
 import { useUserStore } from 'src/stores/user-store';
 import { createInterview } from 'src/services/firebase';
-import { RouteNames } from 'src/enums';
+import { RouteNamesEnum } from 'src/enums';
 import { createNewInterview } from 'src/utils';
 
 defineOptions({ name: 'AddInterviewPage' });
@@ -32,7 +32,7 @@ const onSubmit = async () => {
 
   try {
     await createInterview(userStore.userId as string, newInterview);
-    router.push({ name: RouteNames.INTERVIEWS });
+    router.push({ name: RouteNamesEnum.INTERVIEWS });
   } catch (error) {
     showToast(error as Error);
   } finally {

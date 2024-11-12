@@ -1,4 +1,4 @@
-export enum RoutePaths {
+export enum RoutePathsEnum {
   ROOT = '/',
   ADD = 'add',
   INTERVIEWS = 'interviews',

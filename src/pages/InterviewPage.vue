@@ -7,7 +7,7 @@ import InterviewStatusComponent from 'src/components/InterviewStatusComponent.vu
 import InterviewStageComponent from 'src/components/InterviewStageComponent.vue';
 import SalaryRangeInputComponent from 'src/components/SalaryRangeInputComponent.vue';
 import CompanyInfoInputComponent from 'src/components/CompanyInfoInputComponent.vue';
-import { RouteNames } from 'src/enums';
+import { RouteNamesEnum } from 'src/enums';
 import { getDocumentById, updateInterview } from 'src/services/firebase';
 import { useUserStore } from 'src/stores/user-store';
 import useQuasarNotify from 'src/composables/useQuasarNotify';
@@ -83,7 +83,7 @@ const saveInterview = async () => {
     if (!interviewId || !userStore.userId || !interview.value) return;
 
     await updateInterview(userStore.userId, interviewId, interview.value!);
-    router.push({ name: RouteNames.INTERVIEWS });
+    router.push({ name: RouteNamesEnum.INTERVIEWS });
   } catch (error) {
     showToast(error as Error);
   } finally {

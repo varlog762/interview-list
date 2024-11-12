@@ -1,7 +1,7 @@
 import { useQuasar } from 'quasar';
 
 import { getErrorMessage } from 'src/utils';
-import { ToastTypes } from 'src/enums';
+import { ToastTypesEnum } from 'src/enums';
 
 /**
  * Notify user using Quasar's Notify plugin
@@ -11,7 +11,7 @@ import { ToastTypes } from 'src/enums';
 export default () => {
   const $q = useQuasar();
 
-  return (message: Error | string, type: string = ToastTypes.NEGATIVE) => {
+  return (message: Error | string, type: string = ToastTypesEnum.NEGATIVE) => {
     if (message instanceof Error) {
       message = getErrorMessage(message);
     }

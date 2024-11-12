@@ -11,7 +11,7 @@ import {
 
 import routes from './routes';
 import { useUserStore } from 'stores/user-store';
-import { RouteNames } from 'src/enums';
+import { RouteNamesEnum } from 'src/enums';
 
 /*
  * If not building with SSR mode, you can
@@ -51,15 +51,11 @@ export default route(function (/* { store, ssrContext } */) {
         await userStore.initAuth();
       }
 
-      // FIXME: Fix auth guard
       if (to.meta.requiresAuth && !userStore.isLoggedIn) {
-        console.log(userStore.isLoggedIn);
-        console.log(userStore.userId);
-        next({ name: RouteNames.AUTH });
+        next({ name: RouteNamesEnum.AUTH });
       } else {
         next();
       }
-      // next();
     }
   );
 

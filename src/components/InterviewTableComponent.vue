@@ -4,7 +4,7 @@ import type {
   TableColumnsInterface,
 } from 'src/models';
 import StageTooltipComponent from 'src/components/StageTooltipComponent.vue';
-import { RouteNames } from 'src/enums';
+import { RouteNamesEnum } from 'src/enums';
 import { displaySalary, getStatusBadgeColor } from 'src/utils';
 
 defineOptions({
@@ -182,7 +182,7 @@ const columns: TableColumnsInterface[] = [
         <q-td :props="props" class="flex justify-end">
           <router-link
             :to="{
-              name: RouteNames.INTERVIEW,
+              name: RouteNamesEnum.INTERVIEW,
               params: { id: props.row.id },
             }">
             <q-btn class="q-mr-sm" flat dense color="info" label="edit" />

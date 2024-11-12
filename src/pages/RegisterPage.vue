@@ -2,7 +2,7 @@
 import { ref, computed, watch } from 'vue';
 
 import { validateEmailInput, validatePasswordInput } from 'src/utils';
-import { ErrorMessages } from 'src/enums';
+import { ErrorMessagesEnum } from 'src/enums';
 import { useUserStore } from 'src/stores/user-store';
 
 const userStore = useUserStore();
@@ -14,7 +14,7 @@ const isSubmitButtonDisabled = computed<boolean>(() => !isFormValid.value);
 
 const validatePasswordConfirmation = (): string | true => {
   if (password.value !== confirmPassword.value) {
-    return ErrorMessages.PASSWORDS_DONT_MATCH;
+    return ErrorMessagesEnum.PASSWORDS_DONT_MATCH;
   }
 
   return true;

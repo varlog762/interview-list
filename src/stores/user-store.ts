@@ -6,7 +6,7 @@ import { getAuth, onAuthStateChanged, UserCredential } from 'firebase/auth';
 
 import { firebaseSignUp, firebaseSignIn } from 'src/services/firebase';
 import type { AuthInputInterface } from 'src/models/auth-input.interface';
-import { RoutePaths } from 'src/enums';
+import { RoutePathsEnum } from 'src/enums';
 import useQuasarNotify from 'src/composables/useQuasarNotify';
 
 export const useUserStore = defineStore('user', () => {
@@ -45,7 +45,9 @@ export const useUserStore = defineStore('user', () => {
       isLoading.value = true;
       const { email, password } = authInput;
       await authCallback(email, password);
-      router.replace({ path: `${RoutePaths.ROOT}${RoutePaths.INTERVIEWS}` });
+      router.replace({
+        path: `${RoutePathsEnum.ROOT}${RoutePathsEnum.INTERVIEWS}`,
+      });
     } catch (error) {
       showToast(error as Error);
     } finally {

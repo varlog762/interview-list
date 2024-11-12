@@ -5,13 +5,13 @@ import type {
   InterviewInputInterface,
   InterviewStageInterface,
 } from 'src/models';
-import { ErrorMessages, InterviewStatus } from 'src/enums';
-import { firebaseErrorMessages } from 'src/constants';
+import { ErrorMessagesEnum, InterviewStatusEnum } from 'src/enums';
+import { firebaseErrorMessages, brandColors } from 'src/constants';
 
 export const validateEmailInput = (email: string): string | boolean => {
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
-  return emailRegex.test(email) || ErrorMessages.INVALID_EMAIL;
+  return emailRegex.test(email) || ErrorMessagesEnum.INVALID_EMAIL;
 };
 
 export const validatePasswordInput = (password: string): string | boolean => {
@@ -24,37 +24,37 @@ export const validatePasswordInput = (password: string): string | boolean => {
   );
 
   if (!password) {
-    return ErrorMessages.ENTER_PASSWORD;
+    return ErrorMessagesEnum.ENTER_PASSWORD;
   }
 
   if (password.length < minLength) {
-    return ErrorMessages.INVALID_PASSWORD_MIN_LENGTH;
+    return ErrorMessagesEnum.INVALID_PASSWORD_MIN_LENGTH;
   }
   if (!hasUppercaseLetter) {
-    return ErrorMessages.INVALID_PASSWORD_UPPERCASE;
+    return ErrorMessagesEnum.INVALID_PASSWORD_UPPERCASE;
   }
   if (!hasLowercaseLetter) {
-    return ErrorMessages.INVALID_PASSWORD_LOWERCASE;
+    return ErrorMessagesEnum.INVALID_PASSWORD_LOWERCASE;
   }
   if (!hasNumber) {
-    return ErrorMessages.INVALID_PASSWORD_NUMBER;
+    return ErrorMessagesEnum.INVALID_PASSWORD_NUMBER;
   }
   if (!hasSpecialCharacter) {
-    return ErrorMessages.INVALID_PASSWORD_SPECIAL;
+    return ErrorMessagesEnum.INVALID_PASSWORD_SPECIAL;
   }
 
   return true;
 };
 
 export const validateRequiredInput = (inputValue: string): boolean | string =>
-  !!inputValue || ErrorMessages.REQUIRED_FIELD;
+  !!inputValue || ErrorMessagesEnum.REQUIRED_FIELD;
 
 export const getErrorMessage = (error: Error | FirebaseError): string => {
   if (error instanceof FirebaseError) {
-    return firebaseErrorMessages[error.code] ?? ErrorMessages.UNKNOWN_ERROR;
+    return firebaseErrorMessages[error.code] ?? ErrorMessagesEnum.UNKNOWN_ERROR;
   }
 
-  return ErrorMessages.UNKNOWN_ERROR;
+  return ErrorMessagesEnum.UNKNOWN_ERROR;
 };
 
 export const createNewInterview = (): InterviewInputInterface => {
@@ -70,7 +70,7 @@ export const createNewInterview = (): InterviewInputInterface => {
     hrPhoneNumber: '',
     minSalary: 0,
     maxSalary: 0,
-    status: InterviewStatus.SCHEDULED,
+    status: InterviewStatusEnum.SCHEDULED,
     createdAt: new Date(),
   };
 };
@@ -96,17 +96,17 @@ export const displaySalary = (minSalary: number, maxSalary: number): string => {
 
 export const getStatusBadgeColor = (status: string): string => {
   switch (status) {
-    case InterviewStatus.OFFER:
-      return 'positive';
-    case InterviewStatus.REJECT:
-      return 'negative';
-    case InterviewStatus.SCHEDULED:
-      return 'primary';
-    case InterviewStatus.CANCELED:
-      return 'warning';
-    case InterviewStatus.PENDING:
-      return 'info';
+    case InterviewStatusEnum.OFFER:
+      return brandColors.POSITIVE;
+    case InterviewStatusEnum.REJECT:
+      return brandColors.NEGATIVE;
+    case InterviewStatusEnum.SCHEDULED:
+      return brandColors.PRIMARY;
+    case InterviewStatusEnum.CANCELED:
+      return brandColors.WARNING;
+    case InterviewStatusEnum.PENDING:
+      return brandColors.INFO;
     default:
-      return 'info';
+      return brandColors.INFO;
   }
 };

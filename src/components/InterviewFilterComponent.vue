@@ -2,7 +2,7 @@
 import { ref, computed, watch } from 'vue';
 
 import type { InterviewStatusType, InterviewInputInterface } from 'src/models';
-import { InterviewStatus } from 'src/enums';
+import { InterviewStatusEnum, FilterOptionsEnum } from 'src/enums';
 
 defineOptions({
   name: 'InterviewFilterComponent',
@@ -16,9 +16,9 @@ const emit = defineEmits<{
   (e: 'filteredInterviews', value: InterviewInputInterface[]): void;
 }>();
 
-const filterOptions = ref<string[]>(['Company name', 'Status']);
+const filterOptions = ref<string[]>(Object.values(FilterOptionsEnum));
 const statusOptions = ref<InterviewStatusType[]>(
-  Object.values(InterviewStatus)
+  Object.values(InterviewStatusEnum)
 );
 const selectedFilterType = ref<string | null>(null);
 const companyNameQuery = ref<string | null>(null);

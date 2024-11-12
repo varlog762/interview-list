@@ -1,4 +1,4 @@
-export enum ToastTypes {
+export enum ToastTypesEnum {
   POSITIVE = 'positive',
   NEGATIVE = 'negative',
   WARNING = 'warning',

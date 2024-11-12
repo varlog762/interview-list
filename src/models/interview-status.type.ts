@@ -1,8 +1,8 @@
-import { InterviewStatus } from 'src/enums';
+import { InterviewStatusEnum } from 'src/enums';
 
 export type InterviewStatusType =
-  | InterviewStatus.OFFER
-  | InterviewStatus.REJECT
-  | InterviewStatus.SCHEDULED
-  | InterviewStatus.PENDING
-  | InterviewStatus.CANCELED;
+  | InterviewStatusEnum.OFFER
+  | InterviewStatusEnum.REJECT
+  | InterviewStatusEnum.SCHEDULED
+  | InterviewStatusEnum.PENDING
+  | InterviewStatusEnum.CANCELED;

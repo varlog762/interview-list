@@ -1,6 +1,9 @@
 import { RouteRecordRaw } from 'vue-router';
 
-import { RoutePaths, RouteNames } from 'src/enums';
+import {
+  RoutePathsEnum as RoutePaths,
+  RouteNamesEnum as RouteNames,
+} from 'src/enums';
 import MainLayout from 'layouts/MainLayout.vue';
 import AuthLayout from 'layouts/AuthLayout.vue';
 

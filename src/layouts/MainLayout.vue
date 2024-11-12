@@ -1,34 +1,3 @@
-<template>
-  <q-layout view="lHh Lpr lFf"
-    ><q-header elevated class="bg-primary text-white">
-      <q-toolbar>
-        <q-tabs inline-label v-model="tab">
-          <q-tab
-            v-for="item in menuItems"
-            :key="item.label"
-            :name="item.path"
-            :label="item.label"
-            :icon="item.icon" />
-        </q-tabs>
-        <q-space />
-        <q-btn
-          @click="signOut"
-          square
-          color="primary"
-          icon="logout"
-          class="btn btn-logout" />
-      </q-toolbar>
-    </q-header>
-    <q-page-container>
-      <div class="container">
-        <q-page>
-          <router-view />
-        </q-page>
-      </div>
-    </q-page-container>
-  </q-layout>
-</template>
-
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
@@ -36,7 +5,7 @@ import { useRouter, useRoute } from 'vue-router';
 import type { MenuItemInterface } from 'src/models/menu-item.interface';
 import { useUserStore } from 'stores/user-store';
 import { firebaseSignOut } from 'src/services/firebase';
-import { RouteNames } from 'src/enums';
+import { RouteNamesEnum } from 'src/enums';
 
 defineOptions({
   name: 'MainLayout',
@@ -72,11 +41,43 @@ watch(
   () => userStore.userId,
   newUserId => {
     if (!newUserId) {
-      router.push({ name: RouteNames.AUTH });
+      router.push({ name: RouteNamesEnum.AUTH });
     }
   }
 );
 </script>
+
+<template>
+  <q-layout view="lHh Lpr lFf"
+    ><q-header elevated class="bg-primary text-white">
+      <q-toolbar>
+        <q-tabs inline-label v-model="tab">
+          <q-tab
+            v-for="item in menuItems"
+            :key="item.label"
+            :name="item.path"
+            :label="item.label"
+            :icon="item.icon" />
+        </q-tabs>
+        <q-space />
+        <q-btn
+          @click="signOut"
+          square
+          color="primary"
+          icon="logout"
+          class="btn btn-logout" />
+      </q-toolbar>
+    </q-header>
+    <q-page-container>
+      <div class="container">
+        <q-page>
+          <router-view />
+        </q-page>
+      </div>
+    </q-page-container>
+  </q-layout>
+</template>
+
 <style scoped>
 .btn-logout {
   &::before {
