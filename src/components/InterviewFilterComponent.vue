@@ -75,21 +75,26 @@ watch(filteredInterviews, () => {
           :options="filterOptions"
           label="Filter by"
           class="q-ml-none field-min-width" />
-        <q-input
-          v-if="selectedFilterType === 'Company name'"
-          dense
-          filled
-          v-model="companyNameQuery"
-          label="Enter company name"
-          class="field-min-width" />
-        <q-select
-          v-if="selectedFilterType === 'Status'"
-          dense
-          filled
-          v-model="selectedStatus"
-          :options="statusOptions"
-          label="Select status"
-          class="field-min-width" />
+        <Transition>
+          <q-input
+            v-if="selectedFilterType === 'Company name'"
+            dense
+            filled
+            v-model="companyNameQuery"
+            label="Enter company name"
+            class="field-min-width" />
+        </Transition>
+
+        <Transition>
+          <q-select
+            v-if="selectedFilterType === 'Status'"
+            dense
+            filled
+            v-model="selectedStatus"
+            :options="statusOptions"
+            label="Select status"
+            class="field-min-width" />
+        </Transition>
       </div>
 
       <q-btn
@@ -110,5 +115,16 @@ watch(filteredInterviews, () => {
 
 .field-min-width {
   min-width: 200px;
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: all 0.4s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  transform: translateX(-30%);
+  opacity: 0;
 }
 </style>
