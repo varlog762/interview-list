@@ -3,7 +3,11 @@ export interface TableColumnInterface {
   label: string;
   field: string;
   align?: 'left' | 'right' | 'center';
+  required?: boolean;
   sortable?: boolean;
-  sort?: (a: string, b: string) => number;
-  rawSort?: (a: string, b: string) => number;
+  sortOrder?: 'ad' | 'da';
+  style?: string;
+  classes?: string;
+  headerStyle?: string;
+  headerClasses?: string;
 }

@@ -21,6 +21,7 @@ const columns: TableColumnInterface[] = [
     align: 'left',
     field: 'companyName',
     sortable: true,
+    classes: 'text-body2',
   },
   {
     name: 'hrName',
@@ -50,13 +51,10 @@ const columns: TableColumnInterface[] = [
   {
     name: 'salaryRange',
     label: 'Salary range',
-    align: 'center',
+    align: 'left',
     field: 'maxSalary',
     sortable: true,
-    // sort: (a: string, b: string) => {
-    //   console.log(a, b);
-    //   return 0;
-    // },
+    sortOrder: 'da',
   },
   {
     name: 'status',
@@ -83,9 +81,7 @@ const columns: TableColumnInterface[] = [
       virtual-scroll
       :rows-per-page-options="[0]">
       <template #body-cell-companyName="props">
-        <q-td :props="props">
-          <span class="text-body2">{{ props.row.companyName }}</span>
-        </q-td>
+        <q-td :props="props">{{ props.row.companyName }}</q-td>
       </template>
 
       <template #body-cell-hrName="props">
