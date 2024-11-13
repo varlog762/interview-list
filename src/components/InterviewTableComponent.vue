@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import type {
-  InterviewInputInterface,
-  TableColumnsInterface,
-} from 'src/models';
+import type { InterviewInputInterface, TableColumnInterface } from 'src/models';
 import StageTooltipComponent from 'src/components/StageTooltipComponent.vue';
 import { RouteNamesEnum } from 'src/enums';
 import { displaySalary, getStatusBadgeColor } from 'src/utils';
@@ -17,19 +14,26 @@ const { interviewList } = defineProps<{
 
 defineEmits<{ deleteInterview: [interviewId: string] }>();
 
-const columns: TableColumnsInterface[] = [
+const columns: TableColumnInterface[] = [
   {
     name: 'companyName',
     label: 'Company name',
     align: 'left',
     field: 'companyName',
+    sortable: true,
   },
-  { name: 'hrName', label: "HR's name", field: 'hrName', align: 'center' },
+  {
+    name: 'hrName',
+    label: "HR's name",
+    field: 'hrName',
+    align: 'left',
+    sortable: true,
+  },
   {
     name: 'vacancyLink',
     label: 'Vacancy link',
     field: 'vacancyLink',
-    align: 'center',
+    align: 'left',
   },
   {
     name: 'contacts',
@@ -47,13 +51,19 @@ const columns: TableColumnsInterface[] = [
     name: 'salaryRange',
     label: 'Salary range',
     align: 'center',
-    field: 'salaryRange',
+    field: 'maxSalary',
+    sortable: true,
+    // sort: (a: string, b: string) => {
+    //   console.log(a, b);
+    //   return 0;
+    // },
   },
   {
     name: 'status',
     label: 'Status',
     align: 'left',
     field: 'status',
+    sortable: true,
   },
   {
     name: 'controls',
