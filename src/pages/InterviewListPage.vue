@@ -7,29 +7,23 @@ import InterviewTableComponent from 'src/components/InterviewTableComponent.vue'
 import ConfirmationPopupComponent from 'src/components/ConfirmationPopupComponent.vue';
 import InterviewFilterComponent from 'src/components/InterviewFilterComponent.vue';
 import NoInterviewComponent from 'src/components/NoInterviewComponent.vue';
-import { useUserStore } from 'src/stores/user-store';
-import useQuasarNotify from 'src/composables/useQuasarNotify';
-import { getAllInterviews, deleteInterview } from 'src/services/firebase';
+import { useInterviewStore } from 'src/stores';
 
 defineOptions({
   name: 'InterviewListPage',
 });
 
-const userStore = useUserStore();
-const showToast = useQuasarNotify();
+const interviewStore = useInterviewStore();
 
-const interviewList = ref<InterviewInputInterface[]>([]);
 const filteredInterviewList = ref<InterviewInputInterface[]>([]);
 const interviewIdToDelete = ref<string | null>(null);
 const isLoading = ref<boolean>(true);
 const isPopupVisible = ref<boolean>(false);
 
-const loadInterviews = async () => {
+const getInterviews = async () => {
   try {
-    interviewList.value = await getAllInterviews(userStore.userId as string);
-    filteredInterviewList.value = [...interviewList.value];
-  } catch (error) {
-    showToast(error as Error);
+    await interviewStore.fetchInterviews();
+    filteredInterviewList.value = [...interviewStore.interviewList];
   } finally {
     isLoading.value = false;
   }
@@ -49,12 +43,7 @@ const confirmDeletion = async () => {
   isLoading.value = true;
 
   try {
-    if (!interviewIdToDelete.value || !userStore.userId) return;
-
-    await deleteInterview(userStore.userId, interviewIdToDelete.value);
-    loadInterviews();
-  } catch (error) {
-    showToast(error as Error);
+    await interviewStore.deleteInterview(interviewIdToDelete.value!);
   } finally {
     interviewIdToDelete.value = null;
     isLoading.value = false;
@@ -68,18 +57,18 @@ const updateFilteredInterviews = (
 };
 
 onMounted(() => {
-  loadInterviews();
+  getInterviews();
 });
 </script>
 
 <template>
   <SpinnerComponent v-if="isLoading" />
   <template v-else>
-    <template v-if="interviewList.length">
+    <template v-if="interviewStore.interviewList.length">
       <div class="q-pa-md q-pt-xl">
         <h2 class="title-md q-mb-md">Your interviews</h2>
         <InterviewFilterComponent
-          :interviewList="interviewList"
+          :interviewList="interviewStore.interviewList"
           @filtered-interviews="updateFilteredInterviews" />
         <InterviewTableComponent
           :interviewList="filteredInterviewList"

@@ -1,28 +1,25 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { computed } from 'vue';
 import { Pie } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement } from 'chart.js';
 
 import type { InterviewInputInterface, ChartItemInterface } from 'src/models';
 import { brandColors } from 'src/constants';
-import { useUserStore } from 'src/stores/user-store';
-import { getAllInterviews } from 'src/services/firebase';
 
 defineOptions({
   name: 'ChartComponent',
 });
 
-const userStore = useUserStore();
-const isLoading = ref<boolean>(true);
-
-const interviewList = ref<InterviewInputInterface[]>([]);
+const { interviewList } = defineProps<{
+  interviewList: InterviewInputInterface[];
+}>();
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement);
 
 const interviewData = computed<ChartItemInterface[]>(() => {
-  if (!interviewList.value) return [];
+  if (!interviewList) return [];
 
-  return interviewList.value.reduce((acc, item) => {
+  return interviewList.reduce((acc, item) => {
     const existingItem = acc.find(i => i.status === item.status);
 
     if (existingItem) {
@@ -58,21 +55,6 @@ const chartOptions = {
     title: { display: true, text: '' },
   },
 };
-
-//TODO: replace this:
-const loadInterviews = async () => {
-  try {
-    interviewList.value = await getAllInterviews(userStore.userId as string);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    isLoading.value = false;
-  }
-};
-
-onMounted(() => {
-  loadInterviews();
-});
 </script>
 
 <template>

@@ -68,7 +68,7 @@ export const createInterview = async (
   );
 };
 
-export const getAllInterviews = async (
+export const firebaseGetAllInterviews = async (
   userId: string
 ): Promise<InterviewInputInterface[]> => {
   const requestQuery = query(
@@ -101,7 +101,7 @@ export const updateInterview = async (
   });
 };
 
-export const deleteInterview = async (
+export const firebaseDeleteInterview = async (
   userId: string,
   interviewId: string
 ): Promise<void> => {
