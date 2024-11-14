@@ -30,18 +30,15 @@ onMounted(async () => {
 
 <template>
   <SpinnerComponent v-if="isLoading" />
-  <template v-else>
-    <template v-if="interviewStore.interviewList.length">
-      <div class="q-pa-md q-pt-xl">
-        <h2 class="title-md">Interview statistics</h2>
-        <ChartComponent :interview-list="interviewStore.interviewList" />
-      </div>
-    </template>
 
-    <template v-else>
-      <NoInterviewComponent />
-    </template>
+  <template v-else-if="interviewStore.interviewList.length">
+    <div class="q-pa-md q-pt-xl">
+      <h2 class="title-md">Interview statistics</h2>
+      <ChartComponent :interview-list="interviewStore.interviewList" />
+    </div>
   </template>
+
+  <NoInterviewComponent v-else />
 </template>
 
 <style lang="scss" scoped></style>
