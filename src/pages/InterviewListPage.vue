@@ -93,5 +93,3 @@ onMounted(() => {
     </confirmation-popup-component>
   </template>
 </template>
-
-<style lang="scss" scoped></style>
