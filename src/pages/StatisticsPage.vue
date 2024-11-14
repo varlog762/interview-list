@@ -1,11 +1,16 @@
 <script setup lang="ts">
-import ChartComponent from 'src/components/ChartComponent.vue';
+import { defineAsyncComponent } from 'vue';
+
 import NoInterviewComponent from 'src/components/NoInterviewComponent.vue';
 import { useInterviewStore } from 'src/stores';
 
 defineOptions({
   name: 'StatisticsPage',
 });
+
+const ChartComponent = defineAsyncComponent(
+  () => import('src/components/ChartComponent.vue')
+);
 
 const interviewStore = useInterviewStore();
 </script>

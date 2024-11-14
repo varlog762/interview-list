@@ -38,12 +38,15 @@ const cancelDeletion = () => {
   isPopupVisible.value = false;
 };
 
-const confirmDeletion = async () => {
+const confirmInterviewDeletion = async () => {
   isPopupVisible.value = false;
   isLoading.value = true;
 
   try {
-    await interviewStore.deleteInterview(interviewIdToDelete.value!);
+    if (!interviewIdToDelete.value) return;
+
+    await interviewStore.deleteInterview(interviewIdToDelete.value);
+    filteredInterviewList.value = [...interviewStore.interviewList];
   } finally {
     interviewIdToDelete.value = null;
     isLoading.value = false;
@@ -85,7 +88,7 @@ onMounted(() => {
       :isVisible="isPopupVisible"
       @cancel="cancelDeletion"
       @hide="cancelDeletion"
-      @confirm="confirmDeletion">
+      @confirm="confirmInterviewDeletion">
       Confirm deletion of this interview?
     </confirmation-popup-component>
   </template>
