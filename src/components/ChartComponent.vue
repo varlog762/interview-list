@@ -4,7 +4,7 @@ import { Pie } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement } from 'chart.js';
 
 import type { InterviewInputInterface, ChartItemInterface } from 'src/models';
-import { brandColors } from 'src/constants';
+import { getColorHexByStatus } from 'src/utils';
 
 defineOptions({
   name: 'ChartComponent',
@@ -37,13 +37,9 @@ const chartData = computed(() => ({
   datasets: [
     {
       data: interviewData.value.map(item => item.count),
-      backgroundColor: [
-        brandColors.POSITIVE,
-        brandColors.NEGATIVE,
-        brandColors.INFO,
-        brandColors.PRIMARY,
-        brandColors.WARNING,
-      ],
+      backgroundColor: interviewData.value.map(interview =>
+        getColorHexByStatus(interview.status)
+      ),
     },
   ],
 }));

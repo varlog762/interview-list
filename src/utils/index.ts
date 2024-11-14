@@ -10,7 +10,7 @@ import {
   InterviewStatusEnum,
   ColorNamesEnum,
 } from 'src/enums';
-import { firebaseErrorMessages } from 'src/constants';
+import { firebaseErrorMessages, brandColors } from 'src/constants';
 
 export const validateEmailInput = (email: string): string | boolean => {
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -112,5 +112,22 @@ export const getStatusBadgeColor = (status: string): string => {
       return ColorNamesEnum.INFO;
     default:
       return ColorNamesEnum.INFO;
+  }
+};
+
+export const getColorHexByStatus = (status: string): string => {
+  switch (status) {
+    case InterviewStatusEnum.OFFER:
+      return brandColors.POSITIVE;
+    case InterviewStatusEnum.REJECT:
+      return brandColors.NEGATIVE;
+    case InterviewStatusEnum.SCHEDULED:
+      return brandColors.PRIMARY;
+    case InterviewStatusEnum.CANCELED:
+      return brandColors.WARNING;
+    case InterviewStatusEnum.PENDING:
+      return brandColors.INFO;
+    default:
+      return brandColors.INFO;
   }
 };
