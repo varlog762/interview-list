@@ -6,7 +6,7 @@ import SpinnerComponent from 'src/components/SpinnerComponent.vue';
 import InterviewTableComponent from 'src/components/InterviewTableComponent.vue';
 import ConfirmationPopupComponent from 'src/components/ConfirmationPopupComponent.vue';
 import InterviewFilterComponent from 'src/components/InterviewFilterComponent.vue';
-import NoInterviewComponent from 'src/components/NoInterviewComponent.vue';
+import NoInterviewsComponent from 'src/components/NoInterviewsComponent.vue';
 import { useInterviewStore } from 'src/stores';
 
 defineOptions({
@@ -80,7 +80,7 @@ onMounted(() => {
     </template>
 
     <template v-else>
-      <NoInterviewComponent />
+      <NoInterviewsComponent />
     </template>
 
     <!-- Delete confirmation popup -->

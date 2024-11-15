@@ -2,7 +2,7 @@
 import { ref, defineAsyncComponent, onMounted } from 'vue';
 
 import SpinnerComponent from 'src/components/SpinnerComponent.vue';
-import NoInterviewComponent from 'src/components/NoInterviewComponent.vue';
+import NoInterviewsComponent from 'src/components/NoInterviewsComponent.vue';
 import { useInterviewStore } from 'src/stores';
 
 defineOptions({
@@ -38,7 +38,7 @@ onMounted(async () => {
     </div>
   </template>
 
-  <NoInterviewComponent v-else />
+  <NoInterviewsComponent v-else />
 </template>
 
 <style lang="scss" scoped></style>

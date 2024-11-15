@@ -2,7 +2,7 @@
 import { RouteNamesEnum } from 'src/enums';
 
 defineOptions({
-  name: 'NoInterviewComponent',
+  name: 'NoInterviewsComponent',
 });
 </script>
 
@@ -15,7 +15,7 @@ defineOptions({
         class="no-interview-image" />
     </div>
     <div class="absolute-center">
-      <h2 class="title-md q-mb-xl">There are no interviews</h2>
+      <h2 class="title-md q-mb-xl text-secondary">There are no interviews</h2>
       <router-link :to="{ name: RouteNamesEnum.ADD }" class="block q-mx-auto">
         <q-btn color="primary" label="Add a new one" />
       </router-link>
