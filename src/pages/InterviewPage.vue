@@ -53,6 +53,10 @@ const loadInterview = async (): Promise<void> => {
     if (!interviewId || !userStore.userId) return;
 
     interview.value = await getDocumentById(userStore.userId, interviewId);
+
+    if (!interview.value) {
+      router.push({ name: RouteNamesEnum.NOT_FOUND });
+    }
   } catch (error) {
     showToast(error as Error);
   } finally {
@@ -96,54 +100,49 @@ onMounted(() => {
 });
 </script>
 <template>
-  <!-- spinner -->
   <SpinnerComponent v-if="isLoading" />
-  <!-- page content-->
-  <template v-else>
-    <template v-if="interview">
-      <div class="q-pt-xl q-pa-md q-mx-auto max-w-700 q-pb-xl">
-        <h2 class="title-md">Interview to {{ interview.companyName }}</h2>
-        <q-form @submit="saveInterview" class="q-gutter-md">
-          <CompanyInfoInputComponent v-model:company-info="interview" />
 
-          <SalaryRangeInputComponent
-            v-model:min-salary="interview.minSalary"
-            v-model:maxSalary="interview.maxSalary" />
+  <template v-else-if="interview">
+    <div class="q-pt-xl q-pa-md q-mx-auto max-w-700 q-pb-xl">
+      <h2 class="title-md">Interview to {{ interview.companyName }}</h2>
+      <q-form @submit="saveInterview" class="q-gutter-md">
+        <CompanyInfoInputComponent v-model:company-info="interview" />
 
-          <q-btn
-            @click="addStage"
-            class="q-mb-md"
-            icon="fa-solid fa-plus"
-            label="add stage"
-            type="button"
-            color="info" />
+        <SalaryRangeInputComponent
+          v-model:min-salary="interview.minSalary"
+          v-model:maxSalary="interview.maxSalary" />
 
-          <template v-if="interview?.stages">
-            <TransitionGroup>
-              <InterviewStageComponent
-                v-for="(stage, index) in reversedStages"
-                :key="stage.interviewStageId"
-                v-model:stage="reversedStages[index]"
-                @remove-stage="removeStageById" />
-            </TransitionGroup>
-          </template>
+        <q-btn
+          @click="addStage"
+          class="q-mb-md"
+          icon="fa-solid fa-plus"
+          label="add stage"
+          type="button"
+          color="info" />
 
-          <InterviewStatusComponent
-            v-if="interview.status"
-            v-model:status="interview.status" />
+        <template v-if="interview?.stages">
+          <TransitionGroup>
+            <InterviewStageComponent
+              v-for="(stage, index) in reversedStages"
+              :key="stage.interviewStageId"
+              v-model:stage="reversedStages[index]"
+              @remove-stage="removeStageById" />
+          </TransitionGroup>
+        </template>
 
-          <q-btn
-            icon="fa-regular fa-floppy-disk"
-            label="save interview"
-            type="submit"
-            color="primary"
-            :disable="isFormInvalid"
-            :loading="isLoading" />
-        </q-form>
-      </div>
-    </template>
-    <!-- TODO: add error component -->
-    <template v-else>Oops! Something went wrong...</template>
+        <InterviewStatusComponent
+          v-if="interview.status"
+          v-model:status="interview.status" />
+
+        <q-btn
+          icon="fa-regular fa-floppy-disk"
+          label="save interview"
+          type="submit"
+          color="primary"
+          :disable="isFormInvalid"
+          :loading="isLoading" />
+      </q-form>
+    </div>
   </template>
 </template>
 
