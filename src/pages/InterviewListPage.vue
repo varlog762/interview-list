@@ -66,30 +66,25 @@ onMounted(() => {
 
 <template>
   <SpinnerComponent v-if="isLoading" />
-  <template v-else>
-    <template v-if="interviewStore.interviewList.length">
-      <div class="q-pa-md q-pt-xl">
-        <h2 class="title-md q-mb-md">Your interviews</h2>
-        <InterviewFilterComponent
-          :interviewList="interviewStore.interviewList"
-          @filtered-interviews="updateFilteredInterviews" />
-        <InterviewTableComponent
-          :interviewList="filteredInterviewList"
-          @delete-interview="showInterviewDeletionPopup" />
-      </div>
-    </template>
 
-    <template v-else>
-      <NoInterviewsComponent />
-    </template>
+  <div class="q-pa-md q-pt-xl" v-else-if="interviewStore.interviewList.length">
+    <h2 class="title-md q-mb-md">Your interviews</h2>
+    <InterviewFilterComponent
+      :interviewList="interviewStore.interviewList"
+      @filtered-interviews="updateFilteredInterviews" />
+    <InterviewTableComponent
+      :interviewList="filteredInterviewList"
+      @delete-interview="showInterviewDeletionPopup" />
+  </div>
 
-    <!-- Delete confirmation popup -->
-    <confirmation-popup-component
-      :isVisible="isPopupVisible"
-      @cancel="cancelDeletion"
-      @hide="cancelDeletion"
-      @confirm="confirmInterviewDeletion">
-      Confirm deletion of this interview?
-    </confirmation-popup-component>
-  </template>
+  <NoInterviewsComponent v-else />
+
+  <!-- Delete confirmation popup -->
+  <confirmation-popup-component
+    :isVisible="isPopupVisible"
+    @cancel="cancelDeletion"
+    @hide="cancelDeletion"
+    @confirm="confirmInterviewDeletion">
+    Confirm deletion of this interview?
+  </confirmation-popup-component>
 </template>
