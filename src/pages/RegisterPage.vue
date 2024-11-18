@@ -44,9 +44,9 @@ const onSubmit = () => {
   <div class="form-wrapper">
     <div class="q-pa-md" style="max-width: 500px">
       <h2 class="title-md">Sign up</h2>
-      <router-link to="/auth/login" class="auth-link"
-        >Have an account?</router-link
-      >
+      <router-link to="/auth/login" class="auth-link">
+        Have an account?
+      </router-link>
       <q-form @submit="onSubmit" class="q-gutter-md">
         <q-input
           filled
