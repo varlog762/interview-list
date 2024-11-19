@@ -103,7 +103,7 @@ onMounted(() => {
   <SpinnerComponent v-if="isLoading" />
 
   <template v-else-if="interview">
-    <div class="q-pt-xl q-pa-md q-mx-auto max-w-700 q-pb-xl">
+    <div class="q-pt-xl q-py-md q-mx-auto max-w-700 q-pb-xl">
       <h2 class="title-md">Interview to {{ interview.companyName }}</h2>
       <q-form @submit="saveInterview" class="q-gutter-md">
         <CompanyInfoInputComponent v-model:company-info="interview" />

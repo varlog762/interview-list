@@ -72,7 +72,7 @@ const columns: TableColumnInterface[] = [
 </script>
 
 <template>
-  <div class="q-pa-md">
+  <div class="q-pt-md">
     <q-table
       style="max-height: 80vh"
       :rows="interviewList"

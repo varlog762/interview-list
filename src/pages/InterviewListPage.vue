@@ -67,7 +67,7 @@ onMounted(() => {
 <template>
   <SpinnerComponent v-if="isLoading" />
 
-  <div class="q-pa-md q-pt-xl" v-else-if="interviewStore.interviewList.length">
+  <div class="q-py-md q-pt-xl" v-else-if="interviewStore.interviewList.length">
     <h2 class="title-md q-mb-md">Your interviews</h2>
     <InterviewFilterComponent
       :interviewList="interviewStore.interviewList"
