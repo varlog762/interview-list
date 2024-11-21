@@ -4,6 +4,10 @@ import { computed, ref, watch } from 'vue';
 import { validateEmailInput, validatePasswordInput } from 'src/utils';
 import { useUserStore } from 'src/stores/user-store';
 
+defineOptions({
+  name: 'LoginPage',
+});
+
 const userStore = useUserStore();
 const email = ref<string>('');
 const password = ref<string>('');
@@ -30,7 +34,7 @@ watch([email, password], validateForm);
 
 <template>
   <div class="form-wrapper">
-    <div class="q-pa-md" style="max-width: 500px">
+    <div class="q-pa-md auth-form">
       <h2 class="title-md">Sign in</h2>
       <router-link to="/auth/register" class="auth-link"
         >Need an account?</router-link
@@ -50,11 +54,13 @@ watch([email, password], validateForm);
           v-model="password"
           label="Password"
           :rules="[validatePasswordInput]" />
+
         <div>
           <q-btn
             label="sign in"
             type="submit"
             color="primary"
+            class="auth-button"
             :disable="isSubmitButtonDisabled"
             :loading="userStore.isLoading" />
         </div>
@@ -63,8 +69,4 @@ watch([email, password], validateForm);
   </div>
 </template>
 
-<style lang="scss" scoped>
-.q-pa-md {
-  margin: 0 auto;
-}
-</style>
+<style lang="scss" scoped></style>

@@ -5,6 +5,10 @@ import { validateEmailInput, validatePasswordInput } from 'src/utils';
 import { ErrorMessagesEnum } from 'src/enums';
 import { useUserStore } from 'src/stores/user-store';
 
+defineOptions({
+  name: 'RegisterPage',
+});
+
 const userStore = useUserStore();
 const email = ref<string>('');
 const password = ref<string>('');
@@ -42,7 +46,7 @@ const onSubmit = () => {
 
 <template>
   <div class="form-wrapper">
-    <div class="q-pa-md" style="max-width: 500px">
+    <div class="q-pa-md auth-form">
       <h2 class="title-md">Sign up</h2>
       <router-link to="/auth/login" class="auth-link">
         Have an account?
@@ -74,6 +78,7 @@ const onSubmit = () => {
             label="sign up"
             type="submit"
             color="primary"
+            class="auth-button"
             :disable="isSubmitButtonDisabled"
             :loading="userStore.isLoading" />
         </div>
