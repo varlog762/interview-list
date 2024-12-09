@@ -9,10 +9,7 @@ defineOptions({
 <template>
   <div class="q-pa-md absolute-center no-interview">
     <div>
-      <img
-        src="../assets/images/desert.png"
-        alt="desert"
-        class="no-interview-image" />
+      <img src="/desert.png" alt="desert" class="no-interview-image" />
     </div>
     <div class="absolute-center">
       <h2 class="title-md q-mb-xl text-secondary">There are no interviews</h2>
