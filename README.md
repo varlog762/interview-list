@@ -95,4 +95,4 @@ For a full list of dependencies, refer to the package.json file.
 
 ## Author
 
-Created by [Gregory Pereverzev](linkedin.com/in/gregory-pereverzev-33848759/)
+Created by [Gregory Pereverzev](https://linkedin.com/in/gregory-pereverzev-33848759/)
