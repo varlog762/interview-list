@@ -42,8 +42,8 @@ To run the project locally, you need to set up Firebase and configure environmen
 
 ### Prerequisites
 
-1. **Node.js** (compatible versions: `^22`, `^20`, `^18`, `^16`)
-2. **NPM** (version `>= 6.13.4`) or **Yarn** (`>= 1.21.1`).
+1. **Node.js**
+2. **NPM**
 3. **Firebase account**:
    - Create a Firebase project.
    - Enable necessary Firebase services (e.g., Firestore, Authentication).
@@ -86,6 +86,11 @@ To run the project locally, you need to set up Firebase and configure environmen
 
 For a full list of dependencies, refer to the package.json file.
 
-## Scripts
+## Available Scripts
 
-Here are the available scripts for the project:
+- **npm run dev:** Starts the Quasar development server.
+- **npm run build:** Builds the app for production.
+- **npm run lint:** Runs ESLint for code quality checks.
+- **npm run format:** Formats the codebase using Prettier.
+
+## Created by [Gregory Pereverzev](linkedin.com/in/gregory-pereverzev-33848759/)
