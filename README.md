@@ -71,3 +71,21 @@ To run the project locally, you need to set up Firebase and configure environmen
    npm run dev
    ```
 5. Access the app at http://localhost:9000.
+
+## Dependencies
+
+- **Frontend:**
+  - [Quasar Framework](https://quasar.dev/)
+  - [Vue 3](https://vuejs.org/)
+  - [Vue Router](https://router.vuejs.org/)
+  - [Pinia](https://pinia.vuejs.org/)
+  - [Chart.js](https://www.chartjs.org/)
+  - [Vue-ChartJS](https://vue-chartjs.org/)
+- **Backend:**
+  - [Firebase](https://firebase.google.com/)
+
+For a full list of dependencies, refer to the package.json file.
+
+## Scripts
+
+Here are the available scripts for the project:
