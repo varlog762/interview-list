@@ -52,7 +52,7 @@ To run the project locally, you need to set up Firebase and configure environmen
 
 1. Clone the repository:
    ```bash
-   git clone git@github.com:varlog762/interview-list.git
+   git clone https://github.com/varlog762/interview-list.git
    cd interview-list
    ```
 2. Install dependencies:
