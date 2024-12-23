@@ -93,4 +93,6 @@ For a full list of dependencies, refer to the package.json file.
 - **npm run lint:** Runs ESLint for code quality checks.
 - **npm run format:** Formats the codebase using Prettier.
 
-## Created by [Gregory Pereverzev](linkedin.com/in/gregory-pereverzev-33848759/)
+## Author
+
+Created by [Gregory Pereverzev](linkedin.com/in/gregory-pereverzev-33848759/)
