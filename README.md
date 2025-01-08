@@ -2,6 +2,9 @@
 
 **Interview List** is a personal interview manager application. It helps users track their interviews, manage interview details, and visualize statistics. This project is built using **Quasar Framework** (for the front-end) and **Firebase** (for the back-end).
 
+![SCR-20241223-mnpt](https://github.com/user-attachments/assets/92eb3fb5-5c57-41b3-b43f-b49cd0008840)
+
+
 ## Features
 
 The application consists of three main tabs:
