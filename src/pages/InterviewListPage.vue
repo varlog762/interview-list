@@ -1,4 +1,10 @@
 <script setup lang="ts">
+/**
+ * This component serves as the main page for managing user interviews.
+ * It displays a list of interviews with filtering and deletion options.
+ * Users can view all interviews, filter them based on certain criteria, and delete selected
+ * interviews using a confirmation popup.
+ */
 import { ref, onMounted } from 'vue';
 
 import type { InterviewInputInterface } from 'src/models';
