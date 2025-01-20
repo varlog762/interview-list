@@ -1,14 +1,26 @@
+<script setup lang="ts">
+/**
+ * ErrorNotFound component displays a simple 404 error page when a requested route is not found.
+ */
+
+// Component name for debugging and development purposes
+defineOptions({
+  name: 'ErrorNotFound',
+});
+</script>
+
 <template>
-  <div class="fullscreen bg-blue text-white text-center q-pa-md flex flex-center">
+  <!-- Fullscreen container for 404 error page -->
+  <div
+    class="fullscreen bg-blue text-white text-center q-pa-md flex flex-center">
     <div>
-      <div style="font-size: 30vh">
-        404
-      </div>
+      <!-- Large 404 error code -->
+      <div style="font-size: 30vh">404</div>
 
-      <div class="text-h2" style="opacity:.4">
-        Oops. Nothing here...
-      </div>
+      <!-- Subtitle explaining the error -->
+      <div class="text-h2" style="opacity: 0.4">Oops. Nothing here...</div>
 
+      <!-- Button to navigate back to the home page -->
       <q-btn
         class="q-mt-xl"
         color="white"
@@ -16,14 +28,7 @@
         unelevated
         to="/"
         label="Go Home"
-        no-caps
-      />
+        no-caps />
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-defineOptions({
-  name: 'ErrorNotFound'
-});
-</script>
